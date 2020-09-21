@@ -20,12 +20,6 @@
       //the key for the name of the county is "Geo_NAME"
       //the key for median income is "median_income"
 			var dataset = [];
-			var gname = [];
-			var rowConverter = function(d) {
-				return {
-					median_income: parseFloat(d.median_income)
-				};
-			}
 
 			d3.csv("data/density_income_ny_counties.csv")
 				.then(function(data) {
