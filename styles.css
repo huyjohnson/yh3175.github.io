@@ -1,0 +1,25 @@
+body {
+    background-color:#ffffdd;
+    font-family:helvetica;
+    color:#000000;
+}
+
+#header{
+    color:#000000;
+}/* every thing in the header section of your html, which is "Your Name" for now */
+
+.section {
+    font-size:40px;
+}/* every thing with the class name of section, which are the lines "Assignment" and "Projects" for now */
+
+a {
+    font-size:14px;
+    color:#000000;
+    margin:10px;
+}/*all the links, which start with <a and end with </a>*/
+
+.weeks{
+  font-size:20px;
+  margin:10px;
+  margin-top:20px;
+}
