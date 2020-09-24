@@ -10,18 +10,39 @@ body {
     color:#000000;
 }
 
+.header-container {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
 #header{
     color:#000000;
+    font-weight: bold;
+    font-family: 'Inconsolata';
+    font-size: 16px;
 }/* every thing in the header section of your html, which is "Your Name" for now */
 
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 35px;
+  width: 100%;
+  align-items: center;
+}
+
 .section {
-    font-size:40px;
+  font-family: 'Inconsolata';
+  font-weight: bold;
+  font-size: 28px;
 }/* every thing with the class name of section, which are the lines "Assignment" and "Projects" for now */
 
 a {
-    font-size:14px;
-    color:#000000;
-    margin:10px;
+  font-family: 'Inconsolata';
+  font-size: 14px;
+  color: #000000;
+  margin: 10px;
 }/*all the links, which start with <a and end with </a>*/
 
 .weeks{
