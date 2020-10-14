@@ -5,13 +5,13 @@
 		<title>D3: A static delay before transition</title>
 		<script type="text/javascript" src="../d3.js"></script>
 		<style type="text/css">
-			/* No style rules here yet */		
+			/* No style rules here yet */
 		</style>
 	</head>
 	<body>
-	
+
 		<p>Click on this text to turn chart sideways.</p>
-			
+
 		<script type="text/javascript">
 
             //ASSIGNMENT: turn the bar chart sideways, which was done without transition in an earlier chapter
@@ -19,10 +19,10 @@
 			//Width and height
 			var w = 600;
 			var h = 600;
-			
+
 			var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
 							11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
-			
+
 			var xScale = d3.scaleBand()
 							.domain(d3.range(dataset.length))
 							.rangeRound([0, h])
@@ -31,7 +31,7 @@
 			var yScale = d3.scaleLinear()
 							.domain([0, d3.max(dataset)])
 							.range([0, w]);
-			
+
 			//Create SVG element
 			var svg = d3.select("body")
 						.append("svg")
@@ -87,40 +87,38 @@
 					svg.selectAll("rect")
 					   .data(dataset)
 					   .transition()
-					   .delay(1000)					// <-- A static, 1s delay before transition begins
-					   .duration(2000)
+					   .delay(20)					// <-- A static, 1s delay before transition begins
+					   .duration(1000)
           			   .attr("x", function(d) {
-                           //TODO
+										 return h - yScale(d);
           			   })
          			   .attr("y", function(d, i) {
-                           //TODO
+									 return xScale(i);
          			   })
-			           .attr("height", function(d){
-                           //TODO
-			           })
+			           .attr("height", xScale.bandwidth())
 					   .attr("width", function(d) {
-                           //TODO
+							 return yScale(d);
 					   })
 
 					//Update all labels
 					svg.selectAll("text")
 					   .data(dataset)
 					   .transition()
-					   .delay(1000)					// <-- A static, 1s delay before transition begins
-					   .duration(2000)
+					   .delay(20)					// <-- A static, 1s delay before transition begins
+					   .duration(1000)
 					   .text(function(d) {
 					   		return d;
 					   })
-					   .attr("x", function(d, i) {
-                           //TODO
+					   .attr("x", function(d) {
+							 return h - yScale(d) + 15;
 					   })
 					   .attr("y", function(d,i) {
-                           //TODO
+							 return xScale(i) + xScale.bandwidth() / 2;
 					   });
-					   				
+
 				});
 
-			
+
 		</script>
 	</body>
 </html>
