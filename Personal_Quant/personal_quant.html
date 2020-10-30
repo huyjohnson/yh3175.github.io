@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Personal Quantification Project</title>
+    <script type="text/javascript" src="../d3.js"></script>
+    <link rel="stylesheet" href="styles_quant.css">
+    <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet'>
+  </head>
+  <body>
+    <p>Jacob Hu</p>
+    <p>Number of times my phonescreen lights up</p><br><br>
+    <script type="text/javascript">
+
+      // Width, height, margins
+      var w = 1200;
+      var h = 550;
+      var margin = ({top: 40, right: 40, bottom: 40, left:40});
+      var bar_w = 13;
+
+      // Empty variables for now
+      var dataset, xScale, yScaleC, yScaleS, xAxis, yAxisC, yAxisS;
+
+      // For converting strings to dates
+      var parseTime = d3.timeParse("%m/%d/%Y");
+
+      // For converting dates to strings
+      var formatTime = d3.timeFormat("%e");
+
+      // Function for converting CSV values from strings to numbers
+      var rowConverter = function(d) {
+        return {
+          Date: parseTime(d.pq_date),
+          Stotal: parseInt(d.pq_stotal),
+          Semail: parseInt(d.pq_semail),
+          Sadspam: parseInt(d.pq_sadspam),
+          Ssocmed: parseInt(d.pq_ssocmed),
+          Scom: parseInt(d.pq_scom),
+          Ctotal: parseInt(d.pq_ctotal),
+          Cbrowse: parseInt(d.pq_cbrowse),
+          Ccom: parseInt(d.pq_ccom),
+          Ccheck: parseInt(d.pq_ccheck)
+        };
+      }
+
+      // LOAD DATA
+      d3.csv("pers_quant_data.csv", rowConverter)
+        .then(function(data) {
+
+          // Copy data into global dataset
+          dataset = data;
+
+          // Discover start and end dates in dataset
+          var startDate = d3.min(dataset, function(d) {
+            return d.Date;
+          });
+
+          var endDate = d3.max(dataset, function(d) {
+            return d.Date;
+          });
+
+          // Create scale functions
+          xScale = d3.scaleTime()
+                  .domain([
+                    d3.timeDay.offset(startDate, -1), // startDate minus one day for padding
+                    d3.timeDay.offset(endDate, 1) // endDate plus one day for padding
+                  ])
+                  .range([margin.right, w - margin.right]);
+
+          yScaleS = d3.scaleLinear()
+                  .domain([
+                    0, // zero as baseline
+                    d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; })
+                  ])
+                  .range([0, h - (margin.top * 5)]);
+
+          // Define axes
+          xAxis = d3.axisBottom()
+            .scale(xScale)
+            .ticks(20)
+            .tickFormat(formatTime);
+
+          // Create SVG element
+          var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+          // Group bars in nodes
+          var nodes = svg.selectAll("rect")
+              .data(dataset)
+              .enter()
+              .append("g")
+              .classed("bars", true)
+              .attr("stroke-width", 1.7)
+              .attr("stroke", "white");
+
+          // Stotal bars - background
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top - yScaleS(d.Stotal);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Stotal);
+             })
+             .attr("fill", "#F2F2F2"); // light grey
+
+          // Semail bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top - yScaleS(d.Semail);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Semail);
+             })
+             .attr("fill", "red");
+
+          // Sadspam bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top - yScaleS(d.Sadspam) - yScaleS(d.Semail);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Sadspam);
+             })
+             .attr("fill", "orange");
+
+          // Ssocmed bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top - yScaleS(d.Ssocmed)
+               - yScaleS(d.Sadspam) - yScaleS(d.Semail);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Ssocmed);
+             })
+             .attr("fill", "purple");
+
+          // Scom bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top - yScaleS(d.Ssocmed)
+               - yScaleS(d.Sadspam) - yScaleS(d.Semail) - yScaleS(d.Scom);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Scom);
+             })
+             .attr("fill", "blue");
+
+          // Ctotal bars - background
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top + 5;
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Ctotal);
+             })
+             .attr("fill", "#F2F2F2"); // light grey
+
+          // Cbrowse bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top + 5;
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Cbrowse);
+             })
+             .attr("fill", "black");
+
+          // Ccheck bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top + 5 + yScaleS(d.Cbrowse);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Ccheck);
+             })
+             .attr("fill", "teal");
+
+          // Ccom bars
+          nodes.append("rect")
+             .attr("x", function(d) {
+               return xScale(d.Date);
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top + 5 + yScaleS(d.Cbrowse) + yScaleS(d.Ccheck);
+             })
+             .attr("width", bar_w)
+             .attr("height", function(d) {
+               return yScaleS(d.Ccom);
+             })
+             .attr("fill", "magenta");
+
+          // Create X axis
+          svg.append("g")
+            .attr("class", "axis")
+            .attr("tranform", "translate(0," + (h - margin.left) + ")")
+            .call(xAxis);
+
+        });
+    </script>
+  </body>
+</html>
