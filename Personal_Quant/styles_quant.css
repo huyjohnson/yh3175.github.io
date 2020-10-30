@@ -1,6 +1,19 @@
-p {
-    color:#000000;
-    font-weight: bold;
-    font-family: 'Inconsolata';
-    font-size: 16px;
+p.hd_title {
+  color:#000000;
+  font-weight: bold;
+  font-family: 'Inconsolata';
+  font-size: 16px;
+}
+
+p.hd_name {
+  color: grey;
+  font-family: 'Inconsolata';
+  font-size: 13px;
+}
+
+g.tick {
+  color: grey;
+  font-weight: bold;
+  font-family: 'Inconsolata';
+  font-size: 13px;
 }

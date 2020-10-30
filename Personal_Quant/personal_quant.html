@@ -8,8 +8,10 @@
     <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet'>
   </head>
   <body>
-    <p>Jacob Hu</p>
-    <p>Number of times my phonescreen lights up</p><br><br>
+    <header>
+      <p class="hd_title">Number of times my phonescreen lights up</p>
+      <p class="hd_name">Jacob Hu</p><br><br>
+    </header>
     <script type="text/javascript">
 
       // Width, height, margins
@@ -39,7 +41,8 @@
           Ctotal: parseInt(d.pq_ctotal),
           Cbrowse: parseInt(d.pq_cbrowse),
           Ccom: parseInt(d.pq_ccom),
-          Ccheck: parseInt(d.pq_ccheck)
+          Ccheck: parseInt(d.pq_ccheck),
+          Day: d.pq_day
         };
       }
 
@@ -78,7 +81,8 @@
           xAxis = d3.axisBottom()
             .scale(xScale)
             .ticks(20)
-            .tickFormat(formatTime);
+            .tickFormat(d3.timeFormat("%a"))
+            .tickPadding(-h/2 - margin.top);
 
           // Create SVG element
           var svg = d3.select("body")
@@ -98,7 +102,7 @@
           // Stotal bars - background
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
                return (h/2) + margin.top - yScaleS(d.Stotal);
@@ -112,7 +116,7 @@
           // Semail bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
                return (h/2) + margin.top - yScaleS(d.Semail);
@@ -121,12 +125,12 @@
              .attr("height", function(d) {
                return yScaleS(d.Semail);
              })
-             .attr("fill", "red");
+             .attr("fill", "#A7B9C6");
 
           // Sadspam bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
                return (h/2) + margin.top - yScaleS(d.Sadspam) - yScaleS(d.Semail);
@@ -135,12 +139,12 @@
              .attr("height", function(d) {
                return yScaleS(d.Sadspam);
              })
-             .attr("fill", "orange");
+             .attr("fill", "#CAD5DA");
 
           // Ssocmed bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
                return (h/2) + margin.top - yScaleS(d.Ssocmed)
@@ -150,12 +154,12 @@
              .attr("height", function(d) {
                return yScaleS(d.Ssocmed);
              })
-             .attr("fill", "purple");
+             .attr("fill", "#98A8A7");
 
           // Scom bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
                return (h/2) + margin.top - yScaleS(d.Ssocmed)
@@ -165,15 +169,15 @@
              .attr("height", function(d) {
                return yScaleS(d.Scom);
              })
-             .attr("fill", "blue");
+             .attr("fill", "#D4D5D6");
 
           // Ctotal bars - background
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top + 5;
+               return (h/2) + margin.top;
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
@@ -184,50 +188,50 @@
           // Cbrowse bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top + 5;
+               return (h/2) + margin.top;
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
                return yScaleS(d.Cbrowse);
              })
-             .attr("fill", "black");
+             .attr("fill", "#D6B7AE");
 
           // Ccheck bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top + 5 + yScaleS(d.Cbrowse);
+               return (h/2) + margin.top + yScaleS(d.Cbrowse);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
                return yScaleS(d.Ccheck);
              })
-             .attr("fill", "teal");
+             .attr("fill", "#AAA59F");
 
           // Ccom bars
           nodes.append("rect")
              .attr("x", function(d) {
-               return xScale(d.Date);
+               return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top + 5 + yScaleS(d.Cbrowse) + yScaleS(d.Ccheck);
+               return (h/2) + margin.top + yScaleS(d.Cbrowse) + yScaleS(d.Ccheck);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
                return yScaleS(d.Ccom);
              })
-             .attr("fill", "magenta");
+             .attr("fill", "#C3C6B5");
 
-          // Create X axis
-          svg.append("g")
-            .attr("class", "axis")
-            .attr("tranform", "translate(0," + (h - margin.left) + ")")
-            .call(xAxis);
+             // Create X axis
+             svg.append("g")
+               .attr("class", "axis")
+               .attr("transform", "translate(0," + ((h/2) + margin.top) + ")")
+               .call(xAxis);
 
         });
     </script>
