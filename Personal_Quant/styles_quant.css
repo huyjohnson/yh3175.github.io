@@ -18,6 +18,11 @@ g.tick {
   font-size: 13px;
 }
 
+.tick > line {
+  stroke: #BDBDBD; /* light grey */
+  stroke-width: 0.5px;
+}
+
 g > path {
   stroke-width: 2px;
 }

@@ -85,26 +85,26 @@
                   .range([0, h - (margin.top * 5)]);
 
           // Define axes
-          xAxis = d3.axisBottom()
-            .scale(xScale)
-            .ticks(20)
-            .tickFormat(d3.timeFormat("%a"))
-            .tickPadding(-h/2 - margin.top)
-            .tickSize([0]);
-
           yAxisS = d3.axisRight()
             .scale(yScaleS)
             .ticks(5)
-            .tickPadding(15 - margin.top)
-            .tickSize([0])
+            .tickPadding(-(w - (margin.left * 1.8)))
+            .tickSize(w - (margin.left * 2))
             .tickValues([5, 10, 15, 20, 25]);
 
           yAxisC = d3.axisRight()
             .scale(yScale)
             .ticks(5)
-            .tickPadding(15 - margin.top)
-            .tickSize([0])
+            .tickPadding(-(w - (margin.left * 1.8)))
+            .tickSize(w - (margin.left * 2))
             .tickValues([0 ,5, 10, 15]);
+
+          xAxis = d3.axisBottom()
+            .scale(xScale)
+            .ticks(21)
+            .tickFormat(d3.timeFormat("%a"))
+            .tickPadding(-h/2 - margin.top)
+            .tickSize([0]);
 
           // Create SVG element
           var svg = d3.select("body")
@@ -249,23 +249,35 @@
              })
              .attr("fill", "#C3C6B5");
 
-             // Create X axis
-             svg.append("g")
-               .attr("class", "axis")
-               .attr("transform", "translate(0," + ((h/2) + margin.top) + ")")
-               .call(xAxis);
+         // Create Y axis (S)
+         var yAxisSM = svg.append("g")
+          .attr("class", "axis")
+          .attr("id", "yAxisS")
+          .attr("transform", "translate(" + margin.left + "," + (5 - margin.top) + ")")
+          .call(yAxisS);
 
-             // Create Y axis (S)
-             svg.append("g")
-              .attr("class", "axis")
-              .attr("transform", "translate(" + margin.left + "," + (5 - margin.top) + ")")
-              .call(yAxisS);
+         // Create Y Axis (C)
+         var yAxisCM = svg.append("g")
+          .attr("class", "axis")
+          .attr("transform", "translate(" + margin.left + "," + (h/2 + margin.top) + ")")
+          .call(yAxisC);
 
-             // Create Y Axis (C)
-             svg.append("g")
-              .attr("class", "axis")
-              .attr("transform", "translate(" + margin.left + "," + (h/2 + margin.top) + ")")
-              .call(yAxisC);
+         // Create X axis
+         var xAxisM = svg.append("g")
+           .attr("class", "axis")
+           .attr("id", "xAxisG")
+           .attr("transform", "translate(0," + ((h/2) + margin.top) + ")")
+           .call(xAxis);
+
+        // Remove first and last labels on the x axis
+        d3.select("g#xAxisG")
+         .select("g.tick")
+         .remove();
+
+        d3.select("g#xAxisG")
+         .select("g.tick:last-child")
+         .remove();
+
         });
     </script>
   </body>
