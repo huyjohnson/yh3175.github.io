@@ -17,11 +17,11 @@
       // Width, height, margins
       var w = 1200;
       var h = 550;
-      var margin = ({top: 40, right: 40, bottom: 40, left:40});
+      var margin = ({top: 40, right: 120, bottom: 40, left:120});
       var bar_w = 13;
 
       // Empty variables for now
-      var dataset, xScale, yScaleC, yScaleS, xAxis, yAxisC, yAxisS;
+      var dataset, xScale, yScaleC, yScale, xAxis, yAxisC, yAxisS;
 
       // For converting strings to dates
       var parseTime = d3.timeParse("%m/%d/%Y");
@@ -70,10 +70,17 @@
                   ])
                   .range([margin.right, w - margin.right]);
 
-          yScaleS = d3.scaleLinear()
+          yScale = d3.scaleLinear()
                   .domain([
                     0, // zero as baseline
                     d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; })
+                  ])
+                  .range([0, h - (margin.top * 5)]);
+
+          yScaleS = d3.scaleLinear()
+                  .domain([
+                    d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; }),
+                    0
                   ])
                   .range([0, h - (margin.top * 5)]);
 
@@ -82,7 +89,20 @@
             .scale(xScale)
             .ticks(20)
             .tickFormat(d3.timeFormat("%a"))
-            .tickPadding(-h/2 - margin.top);
+            .tickPadding(-h/2 - margin.top)
+            .tickSize([0]);
+
+          yAxisS = d3.axisRight()
+            .scale(yScaleS)
+            .ticks(5)
+            .tickPadding(15 - margin.top)
+            .tickSize([0]);
+
+          yAxisC = d3.axisRight()
+            .scale(yScale)
+            .ticks(5)
+            .tickPadding(15 - margin.top)
+            .tickSize([0]);
 
           // Create SVG element
           var svg = d3.select("body")
@@ -105,11 +125,11 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top - yScaleS(d.Stotal);
+               return (h/2) + margin.top - yScale(d.Stotal);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Stotal);
+               return yScale(d.Stotal);
              })
              .attr("fill", "#F2F2F2"); // light grey
 
@@ -119,11 +139,11 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top - yScaleS(d.Semail);
+               return (h/2) + margin.top - yScale(d.Semail);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Semail);
+               return yScale(d.Semail);
              })
              .attr("fill", "#A7B9C6");
 
@@ -133,11 +153,11 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top - yScaleS(d.Sadspam) - yScaleS(d.Semail);
+               return (h/2) + margin.top - yScale(d.Sadspam) - yScale(d.Semail);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Sadspam);
+               return yScale(d.Sadspam);
              })
              .attr("fill", "#CAD5DA");
 
@@ -147,12 +167,12 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top - yScaleS(d.Ssocmed)
-               - yScaleS(d.Sadspam) - yScaleS(d.Semail);
+               return (h/2) + margin.top - yScale(d.Ssocmed)
+               - yScale(d.Sadspam) - yScale(d.Semail);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Ssocmed);
+               return yScale(d.Ssocmed);
              })
              .attr("fill", "#98A8A7");
 
@@ -162,12 +182,12 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top - yScaleS(d.Ssocmed)
-               - yScaleS(d.Sadspam) - yScaleS(d.Semail) - yScaleS(d.Scom);
+               return (h/2) + margin.top - yScale(d.Ssocmed)
+               - yScale(d.Sadspam) - yScale(d.Semail) - yScale(d.Scom);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Scom);
+               return yScale(d.Scom);
              })
              .attr("fill", "#D4D5D6");
 
@@ -181,7 +201,7 @@
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Ctotal);
+               return yScale(d.Ctotal);
              })
              .attr("fill", "#F2F2F2"); // light grey
 
@@ -195,7 +215,7 @@
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Cbrowse);
+               return yScale(d.Cbrowse);
              })
              .attr("fill", "#D6B7AE");
 
@@ -205,11 +225,11 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top + yScaleS(d.Cbrowse);
+               return (h/2) + margin.top + yScale(d.Cbrowse);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Ccheck);
+               return yScale(d.Ccheck);
              })
              .attr("fill", "#AAA59F");
 
@@ -219,11 +239,11 @@
                return xScale(d.Date) - bar_w/2;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top + yScaleS(d.Cbrowse) + yScaleS(d.Ccheck);
+               return (h/2) + margin.top + yScale(d.Cbrowse) + yScale(d.Ccheck);
              })
              .attr("width", bar_w)
              .attr("height", function(d) {
-               return yScaleS(d.Ccom);
+               return yScale(d.Ccom);
              })
              .attr("fill", "#C3C6B5");
 
@@ -233,6 +253,17 @@
                .attr("transform", "translate(0," + ((h/2) + margin.top) + ")")
                .call(xAxis);
 
+             // Create Y axis (S)
+             svg.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + margin.left + "," + (5 - margin.top) + ")")
+              .call(yAxisS);
+
+             // Create Y Axis (C)
+             svg.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + margin.left + "," + (h/2 + margin.top) + ")")
+              .call(yAxisC);
         });
     </script>
   </body>

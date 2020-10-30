@@ -6,14 +6,18 @@ p.hd_title {
 }
 
 p.hd_name {
-  color: grey;
+  color: grey; /* light grey */
   font-family: 'Inconsolata';
   font-size: 13px;
 }
 
 g.tick {
-  color: grey;
+  color: #BDBDBD; /* light grey */
   font-weight: bold;
   font-family: 'Inconsolata';
   font-size: 13px;
+}
+
+g > path {
+  stroke-width: 2px;
 }
