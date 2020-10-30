@@ -96,13 +96,15 @@
             .scale(yScaleS)
             .ticks(5)
             .tickPadding(15 - margin.top)
-            .tickSize([0]);
+            .tickSize([0])
+            .tickValues([5, 10, 15, 20, 25]);
 
           yAxisC = d3.axisRight()
             .scale(yScale)
             .ticks(5)
             .tickPadding(15 - margin.top)
-            .tickSize([0]);
+            .tickSize([0])
+            .tickValues([0 ,5, 10, 15]);
 
           // Create SVG element
           var svg = d3.select("body")
