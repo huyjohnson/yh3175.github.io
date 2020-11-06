@@ -130,7 +130,18 @@
               .attr("text-anchor", "middle")
               .attr("font-family", "sans-serif")
               .attr("font-size", "14px")
-              .attr("fill", "black")
+              .attr("fill", "#909497")
+              .attr("font-weight", "bold");
+
+          var numCTotal = svg.selectAll("text")
+              .data(dataset)
+              .enter()
+              .append("g")
+              .attr("class", "Ctotal")
+              .attr("text-anchor", "middle")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "14px")
+              .attr("fill", "#909497")
               .attr("font-weight", "bold");
 
           var numSmall = svg.selectAll("text")
@@ -143,6 +154,7 @@
               .attr("font-size", "12px")
               .attr("fill", "black")
               .attr("font-weight", "bold");
+
           /*
           // Stotal bars - background
           nodes.append("rect")
@@ -172,11 +184,16 @@
                return yScale(d.Semail);
              })
              .attr("fill", "#A7B9C6")
-             .on("mouseover", function() {
-               d3.selectAll(".semail").style("visibility", "visible");
+             .on("mouseover", function(d,i) {
+               var _index = "semail" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
              })
-             .on("mouseout", function() {
-               d3.selectAll(".semail").style("visibility", "hidden");
+             .on("mouseout", function(d,i) {
+               var _index = "semail" + i
+               d3.select(this).attr("fill", "#A7B9C6");
+               d3.select("." + _index).attr("visibility", "hidden");
              });
 
           // Sadspam bars
@@ -191,7 +208,18 @@
              .attr("height", function(d) {
                return yScale(d.Sadspam);
              })
-             .attr("fill", "#CAD5DA");
+             .attr("fill", "#CAD5DA")
+             .on("mouseover", function(d,i) {
+               var _index = "sadspam" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
+             })
+             .on("mouseout", function(d,i) {
+               var _index = "sadspam" + i
+               d3.select(this).attr("fill", "#CAD5DA");
+               d3.select("." + _index).attr("visibility", "hidden");
+             });
 
           // Ssocmed bars
           nodes.append("rect")
@@ -206,7 +234,18 @@
              .attr("height", function(d) {
                return yScale(d.Ssocmed);
              })
-             .attr("fill", "#98A8A7");
+             .attr("fill", "#98A8A7")
+             .on("mouseover", function(d,i) {
+               var _index = "ssocmed" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
+             })
+             .on("mouseout", function(d,i) {
+               var _index = "ssocmed" + i
+               d3.select(this).attr("fill", "#98A8A7");
+               d3.select("." + _index).attr("visibility", "hidden");
+             });
 
           // Scom bars
           nodes.append("rect")
@@ -221,7 +260,18 @@
              .attr("height", function(d) {
                return yScale(d.Scom);
              })
-             .attr("fill", "#D4D5D6");
+             .attr("fill", "#D4D5D6")
+             .on("mouseover", function(d,i) {
+               var _index = "scom" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
+             })
+             .on("mouseout", function(d,i) {
+               var _index = "scom" + i
+               d3.select(this).attr("fill", "#D4D5D6");
+               d3.select("." + _index).attr("visibility", "hidden");
+             });
 
           /*
           // Ctotal bars - background
@@ -251,7 +301,18 @@
              .attr("height", function(d) {
                return yScale(d.Cbrowse);
              })
-             .attr("fill", "#D6B7AE");
+             .attr("fill", "#D6B7AE")
+             .on("mouseover", function(d,i) {
+               var _index = "cbrowse" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
+             })
+             .on("mouseout", function(d,i) {
+               var _index = "cbrowse" + i
+               d3.select(this).attr("fill", "#D6B7AE");
+               d3.select("." + _index).attr("visibility", "hidden");
+             });
 
           // Ccheck bars
           nodes.append("rect")
@@ -265,7 +326,18 @@
              .attr("height", function(d) {
                return yScale(d.Ccheck);
              })
-             .attr("fill", "#AAA59F");
+             .attr("fill", "#AAA59F")
+             .on("mouseover", function(d,i) {
+               var _index = "ccheck" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
+             })
+             .on("mouseout", function(d,i) {
+               var _index = "ccheck" + i
+               d3.select(this).attr("fill", "#AAA59F");
+               d3.select("." + _index).attr("visibility", "hidden");
+             });
 
           // Ccom bars
           nodes.append("rect")
@@ -279,10 +351,26 @@
              .attr("height", function(d) {
                return yScale(d.Ccom);
              })
-             .attr("fill", "#C3C6B5");
+             .attr("fill", "#C3C6B5")
+             .on("mouseover", function(d,i) {
+               var _index = "ccom" + i
+               d3.select(this)
+                 .attr("fill", "#E6E6E6"); // grey
+               d3.select("." + _index).attr("visibility", "visible");
+             })
+             .on("mouseout", function(d,i) {
+               var _index = "ccom" + i
+               d3.select(this).attr("fill", "#C3C6B5");
+               d3.select("." + _index).attr("visibility", "hidden");
+             });
 
              // Create text labels on bars
+             // stotal text
              numSTotal.append("text")
+              .attr("class", function(d,i) {
+                return "stotal" + i;
+              })
+              .attr("visibility", "hidden")
               .text(function(d) {
                 return d.Stotal;
               })
@@ -293,8 +381,12 @@
                 return (h/2) + margin.top - yScale(d.Stotal) - 3;
               });
 
+             // semail text
              numSmall.append("text")
-              .attr("class", "semail")
+              .attr("class", function(d,i) {
+                return "semail" + i;
+              })
+              .attr("visibility", "hidden")
               .text(function(d) {
                 if (d.Semail > 1) {
                   return d.Semail + " emails";
@@ -309,6 +401,143 @@
                 return (h/2) + margin.top - yScale(d.Semail) + 11;
               });
 
+            // sadspam text
+            numSmall.append("text")
+             .attr("class", function(d,i) {
+               return "sadspam" + i;
+             })
+             .attr("visibility", "hidden")
+             .text(function(d) {
+               if (d.Sadspam > 1) {
+                 return d.Sadspam + " ads";
+               } else {
+                 return d.Sadspam + " ad";
+               }
+             })
+             .attr("x", function(d) {
+               return xScale(d.Date) + 8;
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top - yScale(d.Semail) - yScale(d.Sadspam) + 11;
+             });
+
+           // ssocmed text
+           numSmall.append("text")
+            .attr("class", function(d,i) {
+              return "ssocmed" + i;
+            })
+            .attr("visibility", "hidden")
+            .text(function(d) {
+              if (d.Ssocmed > 1) {
+                return d.Ssocmed + " app notifications";
+              } else {
+                return d.Ssocmed + " app notification";
+              }
+            })
+            .attr("x", function(d) {
+              return xScale(d.Date) + 8;
+            })
+            .attr("y", function(d) {
+              return (h/2) + margin.top - yScale(d.Ssocmed) - yScale(d.Semail)
+              - yScale(d.Sadspam) + 11;
+            });
+
+            // scom text
+            numSmall.append("text")
+             .attr("class", function(d,i) {
+               return "scom" + i;
+             })
+             .attr("visibility", "hidden")
+             .text(function(d) {
+               if (d.Scom > 1) {
+                 return d.Scom + " msgs";
+               } else {
+                 return d.Scom + " msg";
+               }
+             })
+             .attr("x", function(d) {
+               return xScale(d.Date) + 8;
+             })
+             .attr("y", function(d) {
+               return (h/2) + margin.top -yScale(d.Scom) - yScale(d.Ssocmed)
+               - yScale(d.Semail) - yScale(d.Sadspam) + 11;
+             });
+
+           // cbrowse text
+           numSmall.append("text")
+            .attr("class", function(d,i) {
+              return "cbrowse" + i;
+            })
+            .attr("visibility", "hidden")
+            .text(function(d) {
+              if (d.Cbrowse > 1) {
+                return d.Cbrowse + " times";
+              } else {
+                return d.Cbrowse + " time";
+              }
+            })
+            .attr("x", function(d) {
+              return xScale(d.Date) + 8;
+            })
+            .attr("y", function(d) {
+              return (h/2) + margin.top + 12;
+            });
+
+          // ccheck text
+          numSmall.append("text")
+           .attr("class", function(d,i) {
+             return "ccheck" + i;
+           })
+           .attr("visibility", "hidden")
+           .text(function(d) {
+             if (d.Ccheck > 1) {
+               return d.Ccheck + " checks";
+             } else {
+               return d.Ccheck + " check";
+             }
+           })
+           .attr("x", function(d) {
+             return xScale(d.Date) + 8;
+           })
+           .attr("y", function(d) {
+             return (h/2) + margin.top + 12 + yScale(d.Cbrowse);
+           });
+
+         // ccom text
+         numSmall.append("text")
+          .attr("class", function(d,i) {
+            return "ccom" + i;
+          })
+          .attr("visibility", "hidden")
+          .text(function(d) {
+            if (d.Ccom > 1) {
+              return d.Ccom + " msgs";
+            } else {
+              return d.Ccom + " msg";
+            }
+          })
+          .attr("x", function(d) {
+            return xScale(d.Date) + 8;
+          })
+          .attr("y", function(d) {
+            return (h/2) + margin.top + 12 + yScale(d.Cbrowse) + yScale(d.Ccheck);
+          });
+
+          // ctotal text
+          numCTotal.append("text")
+           .attr("class", function(d,i) {
+             return "ctotal" + i;
+           })
+           .attr("visibility", "hidden")
+           .text(function(d) {
+             return d.Ctotal;
+           })
+           .attr("x", function(d) {
+             return xScale(d.Date);
+           })
+           .attr("y", function(d) {
+             return (h/2) + margin.top + yScale(d.Ctotal) + 12;
+           });
 
          // Create Y axis (S)
          var yAxisSM = svg.append("g")
