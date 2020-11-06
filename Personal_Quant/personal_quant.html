@@ -15,7 +15,7 @@
     <script type="text/javascript">
 
       // Width, height, margins
-      var w = 1200;
+      var w = 1800;
       var h = 550;
       var margin = ({top: 40, right: 120, bottom: 40, left:120});
       var bar_w = 13;
@@ -121,6 +121,29 @@
               .attr("stroke-width", 1.7)
               .attr("stroke", "white");
 
+          // Group text together
+          var numSTotal = svg.selectAll("text")
+              .data(dataset)
+              .enter()
+              .append("g")
+              .attr("class", "Stotal")
+              .attr("text-anchor", "middle")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "14px")
+              .attr("fill", "black")
+              .attr("font-weight", "bold");
+
+          var numSmall = svg.selectAll("text")
+              .data(dataset)
+              .enter()
+              .append("g")
+              .attr("class", "smallNum")
+              .attr("text-anchor", "left")
+              .attr("font-family", "sans-serif")
+              .attr("font-size", "12px")
+              .attr("fill", "black")
+              .attr("font-weight", "bold");
+          /*
           // Stotal bars - background
           nodes.append("rect")
              .attr("x", function(d) {
@@ -134,6 +157,7 @@
                return yScale(d.Stotal);
              })
              .attr("fill", "#F2F2F2"); // light grey
+             */
 
           // Semail bars
           nodes.append("rect")
@@ -147,7 +171,13 @@
              .attr("height", function(d) {
                return yScale(d.Semail);
              })
-             .attr("fill", "#A7B9C6");
+             .attr("fill", "#A7B9C6")
+             .on("mouseover", function() {
+               d3.selectAll(".semail").style("visibility", "visible");
+             })
+             .on("mouseout", function() {
+               d3.selectAll(".semail").style("visibility", "hidden");
+             });
 
           // Sadspam bars
           nodes.append("rect")
@@ -193,6 +223,7 @@
              })
              .attr("fill", "#D4D5D6");
 
+          /*
           // Ctotal bars - background
           nodes.append("rect")
              .attr("x", function(d) {
@@ -206,6 +237,7 @@
                return yScale(d.Ctotal);
              })
              .attr("fill", "#F2F2F2"); // light grey
+             */
 
           // Cbrowse bars
           nodes.append("rect")
@@ -249,6 +281,35 @@
              })
              .attr("fill", "#C3C6B5");
 
+             // Create text labels on bars
+             numSTotal.append("text")
+              .text(function(d) {
+                return d.Stotal;
+              })
+              .attr("x", function(d) {
+                return xScale(d.Date);
+              })
+              .attr("y", function(d) {
+                return (h/2) + margin.top - yScale(d.Stotal) - 3;
+              });
+
+             numSmall.append("text")
+              .attr("class", "semail")
+              .text(function(d) {
+                if (d.Semail > 1) {
+                  return d.Semail + " emails";
+                } else {
+                  return d.Semail + " email";
+                }
+              })
+              .attr("x", function(d) {
+                return xScale(d.Date) + 8;
+              })
+              .attr("y", function(d) {
+                return (h/2) + margin.top - yScale(d.Semail) + 11;
+              });
+
+
          // Create Y axis (S)
          var yAxisSM = svg.append("g")
           .attr("class", "axis")
@@ -277,6 +338,8 @@
         d3.select("g#xAxisG")
          .select("g.tick:last-child")
          .remove();
+
+
 
         });
     </script>

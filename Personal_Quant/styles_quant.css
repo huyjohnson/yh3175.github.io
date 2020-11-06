@@ -1,3 +1,7 @@
+rect:hover {
+  fill: #E6E6E6; /* grey */
+}
+
 p.hd_title {
   color:#000000;
   font-weight: bold;
@@ -25,4 +29,12 @@ g.tick {
 
 g > path {
   stroke-width: 2px;
+}
+
+.Stotal {
+  visibility: hidden;
+}
+
+.smallNum > .semail {
+  visibility: hidden;
 }
