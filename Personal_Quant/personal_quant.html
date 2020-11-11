@@ -12,565 +12,1037 @@
       <p class="hd_title">Number of times my phonescreen lights up</p>
       <p class="hd_name">Jacob Hu</p><br><br>
     </header>
-    <script type="text/javascript">
+    <section class="data">
+      <script type="text/javascript">
 
-      // Width, height, margins
-      var w = 1800;
-      var h = 550;
-      var margin = ({top: 40, right: 120, bottom: 40, left:120});
-      var bar_w = 13;
+        // Width, height, margins
+        var w = 2200;
+        var h = 550;
+        var margin = ({top: 40, right: 120, bottom: 40, left:250});
+        var bar_w = 13;
 
-      // Empty variables for now
-      var dataset, xScale, yScaleC, yScale, xAxis, yAxisC, yAxisS;
+        // Empty variables for now
+        var dataset, xScale, yScaleC, yScale, xAxis, yAxisC, yAxisS;
 
-      // For converting strings to dates
-      var parseTime = d3.timeParse("%m/%d/%Y");
+        // For converting strings to dates
+        var parseTime = d3.timeParse("%m/%d/%Y");
 
-      // For converting dates to strings
-      var formatTime = d3.timeFormat("%e");
+        // For converting dates to strings
+        var formatTime = d3.timeFormat("%e");
 
-      // Function for converting CSV values from strings to numbers
-      var rowConverter = function(d) {
-        return {
-          Date: parseTime(d.pq_date),
-          Stotal: parseInt(d.pq_stotal),
-          Semail: parseInt(d.pq_semail),
-          Sadspam: parseInt(d.pq_sadspam),
-          Ssocmed: parseInt(d.pq_ssocmed),
-          Scom: parseInt(d.pq_scom),
-          Ctotal: parseInt(d.pq_ctotal),
-          Cbrowse: parseInt(d.pq_cbrowse),
-          Ccom: parseInt(d.pq_ccom),
-          Ccheck: parseInt(d.pq_ccheck),
-          Day: d.pq_day
-        };
-      }
+        // Function for converting CSV values from strings to numbers
+        var rowConverter = function(d) {
+          return {
+            Date: parseTime(d.pq_date),
+            Stotal: parseInt(d.pq_stotal),
+            Semail: parseInt(d.pq_semail),
+            Sadspam: parseInt(d.pq_sadspam),
+            Ssocmed: parseInt(d.pq_ssocmed),
+            Scom: parseInt(d.pq_scom),
+            Ctotal: parseInt(d.pq_ctotal),
+            Cbrowse: parseInt(d.pq_cbrowse),
+            Ccom: parseInt(d.pq_ccom),
+            Ccheck: parseInt(d.pq_ccheck),
+            Day: d.pq_day
+          };
+        }
 
-      // LOAD DATA
-      d3.csv("pers_quant_data.csv", rowConverter)
-        .then(function(data) {
+        // LOAD DATA
+        d3.csv("pers_quant_data.csv", rowConverter)
+          .then(function(data) {
 
-          // Copy data into global dataset
-          dataset = data;
+            // Copy data into global dataset
+            dataset = data;
 
-          // Discover start and end dates in dataset
-          var startDate = d3.min(dataset, function(d) {
-            return d.Date;
-          });
+            // Discover start and end dates in dataset
+            var startDate = d3.min(dataset, function(d) {
+              return d.Date;
+            });
 
-          var endDate = d3.max(dataset, function(d) {
-            return d.Date;
-          });
+            var endDate = d3.max(dataset, function(d) {
+              return d.Date;
+            });
 
-          // Create scale functions
-          xScale = d3.scaleTime()
-                  .domain([
-                    d3.timeDay.offset(startDate, -1), // startDate minus one day for padding
-                    d3.timeDay.offset(endDate, 1) // endDate plus one day for padding
-                  ])
-                  .range([margin.right, w - margin.right]);
+            // Create scale functions
+            xScale = d3.scaleTime()
+                    .domain([
+                      d3.timeDay.offset(startDate, -1), // startDate minus one day for padding
+                      d3.timeDay.offset(endDate, 1) // endDate plus one day for padding
+                    ])
+                    .range([margin.right + 130, w - margin.right - 130]);
 
-          yScale = d3.scaleLinear()
-                  .domain([
-                    0, // zero as baseline
-                    d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; })
-                  ])
-                  .range([0, h - (margin.top * 5)]);
+            yScale = d3.scaleLinear()
+                    .domain([
+                      0, // zero as baseline
+                      d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; })
+                    ])
+                    .range([0, h - (margin.top * 5)]);
 
-          yScaleS = d3.scaleLinear()
-                  .domain([
-                    d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; }),
-                    0
-                  ])
-                  .range([0, h - (margin.top * 5)]);
+            yScaleS = d3.scaleLinear()
+                    .domain([
+                      d3.max(dataset, function(d) { return d.Stotal + d.Ctotal; }),
+                      0
+                    ])
+                    .range([0, h - (margin.top * 5)]);
 
-          // Define axes
-          yAxisS = d3.axisRight()
-            .scale(yScaleS)
-            .ticks(5)
-            .tickPadding(-(w - (margin.left * 1.8)))
-            .tickSize(w - (margin.left * 2))
-            .tickValues([5, 10, 15, 20, 25]);
+            // Define axes
+            yAxisS = d3.axisRight()
+              .scale(yScaleS)
+              .ticks(5)
+              .tickPadding(-(w - (margin.left * 1.8)))
+              .tickSize(w - (margin.left * 2))
+              .tickValues([5, 10, 15, 20, 25]);
 
-          yAxisC = d3.axisRight()
-            .scale(yScale)
-            .ticks(5)
-            .tickPadding(-(w - (margin.left * 1.8)))
-            .tickSize(w - (margin.left * 2))
-            .tickValues([0 ,5, 10, 15]);
+            yAxisC = d3.axisRight()
+              .scale(yScale)
+              .ticks(5)
+              .tickPadding(-(w - (margin.left * 1.8)))
+              .tickSize(w - (margin.left * 2))
+              .tickValues([0 ,5, 10, 15]);
 
-          xAxis = d3.axisBottom()
-            .scale(xScale)
-            .ticks(21)
-            .tickFormat(d3.timeFormat("%a"))
-            .tickPadding(-h/2 - margin.top)
-            .tickSize([0]);
+            xAxis = d3.axisBottom()
+              .scale(xScale)
+              .ticks(21)
+              .tickFormat(d3.timeFormat("%a"))
+              .tickPadding(-h/2 - margin.top)
+              .tickSize([0]);
 
-          // Create SVG element
-          var svg = d3.select("body")
-                    .append("svg")
-                    .attr("width", w)
-                    .attr("height", h);
+            // Create SVG element
+            var svg = d3.select("section")
+                      .append("svg")
+                      .attr("width", w)
+                      .attr("height", h);
 
-          // Group bars in nodes
-          var nodes = svg.selectAll("rect")
-              .data(dataset)
-              .enter()
-              .append("g")
-              .classed("bars", true)
-              .attr("stroke-width", 1.7)
-              .attr("stroke", "white");
+            // Group bars in nodes
+            var nodes = svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("g")
+                .classed("bars", true)
+                .attr("stroke-width", 1.7)
+                .attr("stroke", "white");
 
-          // Group text together
-          var numSTotal = svg.selectAll("text")
-              .data(dataset)
-              .enter()
-              .append("g")
-              .attr("class", "Stotal")
-              .attr("text-anchor", "middle")
-              .attr("font-family", "sans-serif")
-              .attr("font-size", "14px")
-              .attr("fill", "#909497")
-              .attr("font-weight", "bold");
+            // Group text together
+            var numSTotal = svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("g")
+                .attr("class", "Stotal")
+                .attr("text-anchor", "middle")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "14px")
+                .attr("fill", "#909497")
+                .attr("font-weight", "bold");
 
-          var numCTotal = svg.selectAll("text")
-              .data(dataset)
-              .enter()
-              .append("g")
-              .attr("class", "Ctotal")
-              .attr("text-anchor", "middle")
-              .attr("font-family", "sans-serif")
-              .attr("font-size", "14px")
-              .attr("fill", "#909497")
-              .attr("font-weight", "bold");
+            var numCTotal = svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("g")
+                .attr("class", "Ctotal")
+                .attr("text-anchor", "middle")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "14px")
+                .attr("fill", "#909497")
+                .attr("font-weight", "bold");
 
-          var numSmall = svg.selectAll("text")
-              .data(dataset)
-              .enter()
-              .append("g")
-              .attr("class", "smallNum")
-              .attr("text-anchor", "left")
-              .attr("font-family", "sans-serif")
-              .attr("font-size", "12px")
-              .attr("fill", "black")
-              .attr("font-weight", "bold");
+            var numSmall = svg.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("g")
+                .attr("class", "smallNum")
+                .attr("text-anchor", "left")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "12px")
+                .attr("fill", "black")
+                .attr("font-weight", "bold");
 
-          /*
-          // Stotal bars - background
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top - yScale(d.Stotal);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Stotal);
-             })
-             .attr("fill", "#F2F2F2"); // light grey
-             */
+            /*
+            // Stotal bars - background
+            nodes.append("rect")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top - yScale(d.Stotal);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Stotal);
+               })
+               .attr("fill", "#F2F2F2"); // light grey
+               */
 
-          // Semail bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top - yScale(d.Semail);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Semail);
-             })
-             .attr("fill", "#A7B9C6")
-             .on("mouseover", function(d,i) {
-               var _index = "semail" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "semail" + i
-               d3.select(this).attr("fill", "#A7B9C6");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Semail bars
+            nodes.append("rect")
+               .attr("class", "semail_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top - yScale(d.Semail);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Semail);
+               })
+               .attr("fill", "#A7B9C6")
+               .on("mouseover", function(d,i) {
+                 var _index = "semail" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible");
+                 d3.select("." + _Stotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Semail + "/" + d.Stotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "semail" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this).attr("fill", "#A7B9C6");
+                 d3.select("." + _index).attr("visibility", "hidden");
+                 d3.select("." + _Stotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               })
+               .on("click", function(d,i) {
+                 var _index = "semail" + i
+                 console.log(_index);
+               });
 
-          // Sadspam bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top - yScale(d.Sadspam) - yScale(d.Semail);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Sadspam);
-             })
-             .attr("fill", "#CAD5DA")
-             .on("mouseover", function(d,i) {
-               var _index = "sadspam" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "sadspam" + i
-               d3.select(this).attr("fill", "#CAD5DA");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Sadspam bars
+            nodes.append("rect")
+               .attr("class", "sadspam_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top - yScale(d.Sadspam) - yScale(d.Semail);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Sadspam);
+               })
+               .attr("fill", "#CAD5DA")
+               .on("mouseover", function(d,i) {
+                 var _index = "sadspam" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible")
+                 d3.select("." + _Stotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Sadspam + "/" + d.Stotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "sadspam" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this).attr("fill", "#CAD5DA");
+                 d3.select("." + _index).attr("visibility", "hidden")
+                 d3.select("." + _Stotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               });
 
-          // Ssocmed bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top - yScale(d.Ssocmed)
-               - yScale(d.Sadspam) - yScale(d.Semail);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Ssocmed);
-             })
-             .attr("fill", "#98A8A7")
-             .on("mouseover", function(d,i) {
-               var _index = "ssocmed" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "ssocmed" + i
-               d3.select(this).attr("fill", "#98A8A7");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Ssocmed bars
+            nodes.append("rect")
+               .attr("class", "ssocmed_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top - yScale(d.Ssocmed)
+                 - yScale(d.Sadspam) - yScale(d.Semail);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Ssocmed);
+               })
+               .attr("fill", "#98A8A7")
+               .on("mouseover", function(d,i) {
+                 var _index = "ssocmed" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible")
+                 d3.select("." + _Stotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Ssocmed + "/" + d.Stotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "ssocmed" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this).attr("fill", "#98A8A7");
+                 d3.select("." + _index).attr("visibility", "hidden")
+                 d3.select("." + _Stotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               });
 
-          // Scom bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top - yScale(d.Ssocmed)
-               - yScale(d.Sadspam) - yScale(d.Semail) - yScale(d.Scom);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Scom);
-             })
-             .attr("fill", "#D4D5D6")
-             .on("mouseover", function(d,i) {
-               var _index = "scom" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "scom" + i
-               d3.select(this).attr("fill", "#D4D5D6");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Scom bars
+            nodes.append("rect")
+               .attr("class", "scom_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top - yScale(d.Ssocmed)
+                 - yScale(d.Sadspam) - yScale(d.Semail) - yScale(d.Scom);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Scom);
+               })
+               .attr("fill", "#D4D5D6")
+               .on("mouseover", function(d,i) {
+                 var _index = "scom" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible")
+                 d3.select("." + _Stotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Scom + "/" + d.Stotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "scom" + i
+                 var _Stotal = "stotal" + i
+                 d3.select(this).attr("fill", "#D4D5D6");
+                 d3.select("." + _index).attr("visibility", "hidden")
+                 d3.select("." + _Stotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               });
 
-          /*
-          // Ctotal bars - background
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top;
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Ctotal);
-             })
-             .attr("fill", "#F2F2F2"); // light grey
-             */
+            /*
+            // Ctotal bars - background
+            nodes.append("rect")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top;
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Ctotal);
+               })
+               .attr("fill", "#F2F2F2"); // light grey
+               */
 
-          // Cbrowse bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top;
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Cbrowse);
-             })
-             .attr("fill", "#D6B7AE")
-             .on("mouseover", function(d,i) {
-               var _index = "cbrowse" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "cbrowse" + i
-               d3.select(this).attr("fill", "#D6B7AE");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Cbrowse bars
+            nodes.append("rect")
+               .attr("class", "cbrowse_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top;
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Cbrowse);
+               })
+               .attr("fill", "#D6B7AE")
+               .on("mouseover", function(d,i) {
+                 var _index = "cbrowse" + i
+                 var _Ctotal = "ctotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible")
+                 d3.select("." + _Ctotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Cbrowse + "/" + d.Ctotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "cbrowse" + i
+                 var _Ctotal = "ctotal" + i
+                 d3.select(this).attr("fill", "#D6B7AE");
+                 d3.select("." + _index).attr("visibility", "hidden")
+                 d3.select("." + _Ctotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               });
 
-          // Ccheck bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top + yScale(d.Cbrowse);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Ccheck);
-             })
-             .attr("fill", "#AAA59F")
-             .on("mouseover", function(d,i) {
-               var _index = "ccheck" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "ccheck" + i
-               d3.select(this).attr("fill", "#AAA59F");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Ccheck bars
+            nodes.append("rect")
+               .attr("class", "ccheck_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top + yScale(d.Cbrowse);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Ccheck);
+               })
+               .attr("fill", "#AAA59F")
+               .on("mouseover", function(d,i) {
+                 var _index = "ccheck" + i
+                 var _Ctotal = "ctotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible")
+                 d3.select("." + _Ctotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Ccheck + "/" + d.Ctotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "ccheck" + i
+                 var _Ctotal = "ctotal" + i
+                 d3.select(this).attr("fill", "#AAA59F");
+                 d3.select("." + _index).attr("visibility", "hidden")
+                 d3.select("." + _Ctotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               });
 
-          // Ccom bars
-          nodes.append("rect")
-             .attr("x", function(d) {
-               return xScale(d.Date) - bar_w/2;
-             })
-             .attr("y", function(d) {
-               return (h/2) + margin.top + yScale(d.Cbrowse) + yScale(d.Ccheck);
-             })
-             .attr("width", bar_w)
-             .attr("height", function(d) {
-               return yScale(d.Ccom);
-             })
-             .attr("fill", "#C3C6B5")
-             .on("mouseover", function(d,i) {
-               var _index = "ccom" + i
-               d3.select(this)
-                 .attr("fill", "#E6E6E6"); // grey
-               d3.select("." + _index).attr("visibility", "visible");
-             })
-             .on("mouseout", function(d,i) {
-               var _index = "ccom" + i
-               d3.select(this).attr("fill", "#C3C6B5");
-               d3.select("." + _index).attr("visibility", "hidden");
-             });
+            // Ccom bars
+            nodes.append("rect")
+               .attr("class", "ccom_bars")
+               .attr("x", function(d) {
+                 return xScale(d.Date) - bar_w/2;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top + yScale(d.Cbrowse) + yScale(d.Ccheck);
+               })
+               .attr("width", bar_w)
+               .attr("height", function(d) {
+                 return yScale(d.Ccom);
+               })
+               .attr("fill", "#C3C6B5")
+               .on("mouseover", function(d,i) {
+                 var _index = "ccom" + i
+                 var _Ctotal = "ctotal" + i
+                 d3.select(this)
+                   .attr("fill", "#E6E6E6"); // grey
+                 d3.select("." + _index).attr("visibility", "visible")
+                 d3.select("." + _Ctotal)
+                   .transition()
+                   .duration(250)
+                   .style("opacity", 1)
+                   .text(function(d) {
+                     return d.Ccom + "/" + d.Ctotal;
+                   });
+               })
+               .on("mouseout", function(d,i) {
+                 var _index = "ccom" + i
+                 var _Ctotal = "ctotal" + i
+                 d3.select(this).attr("fill", "#C3C6B5");
+                 d3.select("." + _index).attr("visibility", "hidden")
+                 d3.select("." + _Ctotal)
+                    .transition()
+                    .duration(150)
+                    .style("opacity", 0);
+               });
 
-             // Create text labels on bars
-             // stotal text
-             numSTotal.append("text")
-              .attr("class", function(d,i) {
-                return "stotal" + i;
-              })
-              .attr("visibility", "hidden")
-              .text(function(d) {
-                return d.Stotal;
-              })
-              .attr("x", function(d) {
-                return xScale(d.Date);
-              })
-              .attr("y", function(d) {
-                return (h/2) + margin.top - yScale(d.Stotal) - 3;
-              });
+               // Create text labels on bars
+               // stotal text
+               numSTotal.append("text")
+                .attr("class", function(d,i) {
+                  return "stotal" + i;
+                })
+                .style("opacity", 0)
+                .text(function(d) {
+                  return d.Stotal;
+                })
+                .attr("x", function(d) {
+                  return xScale(d.Date);
+                })
+                .attr("y", function(d) {
+                  return (h/2) + margin.top - yScale(d.Stotal) - 3;
+                });
 
-             // semail text
+               // semail text
+               numSmall.append("text")
+                .attr("class", function(d,i) {
+                  return "semail" + i;
+                })
+                .attr("visibility", "hidden")
+                .text(function(d) {
+                  if (d.Semail > 1) {
+                    return d.Semail + " emails";
+                  } else {
+                    return d.Semail + " email";
+                  }
+                })
+                .attr("x", function(d) {
+                  return xScale(d.Date) + 8;
+                })
+                .attr("y", function(d) {
+                  return (h/2) + margin.top - yScale(d.Semail) + 11;
+                });
+
+              // sadspam text
+              numSmall.append("text")
+               .attr("class", function(d,i) {
+                 return "sadspam" + i;
+               })
+               .attr("visibility", "hidden")
+               .text(function(d) {
+                 if (d.Sadspam > 1) {
+                   return d.Sadspam + " ads";
+                 } else {
+                   return d.Sadspam + " ad";
+                 }
+               })
+               .attr("x", function(d) {
+                 return xScale(d.Date) + 8;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top - yScale(d.Semail) - yScale(d.Sadspam) + 11;
+               });
+
+             // ssocmed text
              numSmall.append("text")
               .attr("class", function(d,i) {
-                return "semail" + i;
+                return "ssocmed" + i;
               })
               .attr("visibility", "hidden")
               .text(function(d) {
-                if (d.Semail > 1) {
-                  return d.Semail + " emails";
+                if (d.Ssocmed > 1) {
+                  return d.Ssocmed + " app notifications";
                 } else {
-                  return d.Semail + " email";
+                  return d.Ssocmed + " app notification";
                 }
               })
               .attr("x", function(d) {
                 return xScale(d.Date) + 8;
               })
               .attr("y", function(d) {
-                return (h/2) + margin.top - yScale(d.Semail) + 11;
+                return (h/2) + margin.top - yScale(d.Ssocmed) - yScale(d.Semail)
+                - yScale(d.Sadspam) + 11;
               });
 
-            // sadspam text
+              // scom text
+              numSmall.append("text")
+               .attr("class", function(d,i) {
+                 return "scom" + i;
+               })
+               .attr("visibility", "hidden")
+               .text(function(d) {
+                 if (d.Scom > 1) {
+                   return d.Scom + " msgs";
+                 } else {
+                   return d.Scom + " msg";
+                 }
+               })
+               .attr("x", function(d) {
+                 return xScale(d.Date) + 8;
+               })
+               .attr("y", function(d) {
+                 return (h/2) + margin.top -yScale(d.Scom) - yScale(d.Ssocmed)
+                 - yScale(d.Semail) - yScale(d.Sadspam) + 11;
+               });
+
+             // cbrowse text
+             numSmall.append("text")
+              .attr("class", function(d,i) {
+                return "cbrowse" + i;
+              })
+              .attr("visibility", "hidden")
+              .text(function(d) {
+                if (d.Cbrowse > 1) {
+                  return d.Cbrowse + " times";
+                } else {
+                  return d.Cbrowse + " time";
+                }
+              })
+              .attr("x", function(d) {
+                return xScale(d.Date) + 8;
+              })
+              .attr("y", function(d) {
+                return (h/2) + margin.top + 12;
+              });
+
+            // ccheck text
             numSmall.append("text")
              .attr("class", function(d,i) {
-               return "sadspam" + i;
+               return "ccheck" + i;
              })
              .attr("visibility", "hidden")
              .text(function(d) {
-               if (d.Sadspam > 1) {
-                 return d.Sadspam + " ads";
+               if (d.Ccheck > 1) {
+                 return d.Ccheck + " taps";
                } else {
-                 return d.Sadspam + " ad";
+                 return d.Ccheck + " tap";
                }
              })
              .attr("x", function(d) {
                return xScale(d.Date) + 8;
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top - yScale(d.Semail) - yScale(d.Sadspam) + 11;
+               return (h/2) + margin.top + 12 + yScale(d.Cbrowse);
              });
 
-           // ssocmed text
+           // ccom text
            numSmall.append("text")
             .attr("class", function(d,i) {
-              return "ssocmed" + i;
+              return "ccom" + i;
             })
             .attr("visibility", "hidden")
             .text(function(d) {
-              if (d.Ssocmed > 1) {
-                return d.Ssocmed + " app notifications";
+              if (d.Ccom > 1) {
+                return d.Ccom + " msgs";
               } else {
-                return d.Ssocmed + " app notification";
+                return d.Ccom + " msg";
               }
             })
             .attr("x", function(d) {
               return xScale(d.Date) + 8;
             })
             .attr("y", function(d) {
-              return (h/2) + margin.top - yScale(d.Ssocmed) - yScale(d.Semail)
-              - yScale(d.Sadspam) + 11;
+              return (h/2) + margin.top + 12 + yScale(d.Cbrowse) + yScale(d.Ccheck);
             });
 
-            // scom text
-            numSmall.append("text")
+            // ctotal text
+            numCTotal.append("text")
              .attr("class", function(d,i) {
-               return "scom" + i;
+               return "ctotal" + i;
              })
-             .attr("visibility", "hidden")
-             .text(function(d) {
-               if (d.Scom > 1) {
-                 return d.Scom + " msgs";
-               } else {
-                 return d.Scom + " msg";
-               }
+             .style("opacity", 0)
+             .text(function(d,i) {
+               return d.Ctotal;
              })
              .attr("x", function(d) {
-               return xScale(d.Date) + 8;
+               return xScale(d.Date);
              })
              .attr("y", function(d) {
-               return (h/2) + margin.top -yScale(d.Scom) - yScale(d.Ssocmed)
-               - yScale(d.Semail) - yScale(d.Sadspam) + 11;
+               return (h/2) + margin.top + yScale(d.Ctotal) + 12;
              });
 
-           // cbrowse text
-           numSmall.append("text")
-            .attr("class", function(d,i) {
-              return "cbrowse" + i;
-            })
-            .attr("visibility", "hidden")
-            .text(function(d) {
-              if (d.Cbrowse > 1) {
-                return d.Cbrowse + " times";
-              } else {
-                return d.Cbrowse + " time";
-              }
-            })
-            .attr("x", function(d) {
-              return xScale(d.Date) + 8;
-            })
-            .attr("y", function(d) {
-              return (h/2) + margin.top + 12;
-            });
+           // Create Y axis (S)
+           var yAxisSM = svg.append("g")
+            .attr("class", "axis")
+            .attr("id", "yAxisS")
+            .attr("transform", "translate(" + margin.left + "," + (5 - margin.top) + ")")
+            .call(yAxisS);
 
-          // ccheck text
-          numSmall.append("text")
-           .attr("class", function(d,i) {
-             return "ccheck" + i;
-           })
-           .attr("visibility", "hidden")
-           .text(function(d) {
-             if (d.Ccheck > 1) {
-               return d.Ccheck + " checks";
-             } else {
-               return d.Ccheck + " check";
-             }
-           })
-           .attr("x", function(d) {
-             return xScale(d.Date) + 8;
-           })
-           .attr("y", function(d) {
-             return (h/2) + margin.top + 12 + yScale(d.Cbrowse);
-           });
+           // Create Y Axis (C)
+           var yAxisCM = svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(" + margin.left + "," + (h/2 + margin.top) + ")")
+            .call(yAxisC);
 
-         // ccom text
-         numSmall.append("text")
-          .attr("class", function(d,i) {
-            return "ccom" + i;
-          })
-          .attr("visibility", "hidden")
-          .text(function(d) {
-            if (d.Ccom > 1) {
-              return d.Ccom + " msgs";
-            } else {
-              return d.Ccom + " msg";
-            }
-          })
-          .attr("x", function(d) {
-            return xScale(d.Date) + 8;
-          })
-          .attr("y", function(d) {
-            return (h/2) + margin.top + 12 + yScale(d.Cbrowse) + yScale(d.Ccheck);
+           // Create X axis
+           var xAxisM = svg.append("g")
+             .attr("class", "axis")
+             .attr("id", "xAxisG")
+             .attr("transform", "translate(0," + ((h/2) + margin.top) + ")")
+             .call(xAxis);
+
+          // Remove first and last labels on the x axis
+          d3.select("g#xAxisG")
+           .select("g.tick")
+           .remove();
+
+          d3.select("g#xAxisG")
+           .select("g.tick:last-child")
+           .remove();
+
+           // LEGEND
+           // Creating legend box
+           var leg_w = 35;
+           var leg_h = 15;
+           var leg_buffer = 10;
+           var leg_width = 120;
+           var leg_top = margin.top + 168
+
+           var legend_nodes = svg.append("g")
+                              .attr("class", "legend_box");
+
+           var legend_text = svg.append("g")
+                             .attr("class", "leg_text_box")
+                             .attr("text-anchor", "left")
+                             .attr("font-family", "sans-serif")
+                             .attr("font-size", "12px")
+                             .attr("fill", "black")
+                             .attr("font-weight", "bold");
+
+            // legend colors and small boxes
+            // auto notifications
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top)
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#D4D5D6")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "semail_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "sadspam_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "ssocmed_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "semail_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "sadspam_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ssocmed_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top + leg_h + leg_buffer)
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#98A8A7")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "semail_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "sadspam_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "scom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "semail_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "sadspam_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "scom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top + (2 * (leg_h + leg_buffer)))
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#CAD5DA")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "semail_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "ssocmed_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "scom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "semail_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ssocmed_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "scom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top + (3 * (leg_h + leg_buffer)))
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#A7B9C6")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ssocmed_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "sadspam_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "scom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_auto")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "ssocmed_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "sadspam_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "scom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            // self checks
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top + 24 + (4 * (leg_h + leg_buffer)))
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#D6B7AE")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_self")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ccheck_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "ccom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_self")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "ccheck_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ccom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top + 24 + (5 * (leg_h + leg_buffer)))
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#AAA59F")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_self")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "cbrowse_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "ccom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_self")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "cbrowse_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ccom_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            legend_nodes.append("rect")
+              .attr("class", "small_leg_box")
+              .attr("x", margin.left - leg_width)
+              .attr("y", leg_top + 24 + (6 * (leg_h + leg_buffer)))
+              .attr("width", leg_w)
+              .attr("height", leg_h)
+              .attr("fill", "#C3C6B5")
+              .on("mouseover", function() {
+                d3.select("." + "leg_text_self")
+                  .transition()
+                  .duration(250)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "ccheck_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+                d3.selectAll("." + "cbrowse_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 0.3);
+              })
+              .on("mouseout", function() {
+                d3.select("." + "leg_text_self")
+                  .transition()
+                  .duration(1000)
+                  .attr("opacity", 0);
+                d3.selectAll("." + "ccheck_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+                d3.selectAll("." + "cbrowse_bars")
+                  .transition()
+                  .duration(350)
+                  .attr("opacity", 1);
+              });
+
+            // legend leg
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("communication")
+              .attr("x", margin.left - leg_width - 93)
+              .attr("y", leg_top + 12);
+
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("social media")
+              .attr("x", margin.left - leg_width - 78)
+              .attr("y", leg_top + 12 + leg_h + leg_buffer);
+
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("ad/spam")
+              .attr("x", margin.left - leg_width - 55)
+              .attr("y", leg_top + 12 + (2 * (leg_h + leg_buffer)));
+
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("email")
+              .attr("x", margin.left - leg_width - 38)
+              .attr("y", leg_top + 12 + (3 * (leg_h + leg_buffer)));
+
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("browsing")
+              .attr("x", margin.left - leg_width - 57)
+              .attr("y", leg_top + 12 + 24 + (4 * (leg_h + leg_buffer)));
+
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("taps")
+              .attr("x", margin.left - leg_width - 31)
+              .attr("y", leg_top + 12 + 24 + (5 * (leg_h + leg_buffer)));
+
+            legend_text.append("text")
+              .attr("class", "leg_text")
+              .text("communication")
+              .attr("x", margin.left - leg_width - 93)
+              .attr("y", leg_top + 12 + 24 + (6 * (leg_h + leg_buffer)));
+
+            // legend titles
+            legend_text.append("text")
+              .attr("class", "leg_text_auto")
+              .text("auto notifications")
+              .attr("x", margin.left - leg_width - 87)
+              .attr("y", leg_top - 12)
+              .attr("font-size", "14px")
+              .attr("fill", "#a5a5a5")
+              .attr("opacity", 0);
+
+            legend_text.append("text")
+              .attr("class", "leg_text_self")
+              .text("self-check")
+              .attr("x", margin.left - leg_width - 38)
+              .attr("y", leg_top + 115)
+              .attr("font-size", "14px")
+              .attr("fill", "#a5a5a5")
+              .attr("opacity", 0);
+
+
+
           });
-
-          // ctotal text
-          numCTotal.append("text")
-           .attr("class", function(d,i) {
-             return "ctotal" + i;
-           })
-           .attr("visibility", "hidden")
-           .text(function(d) {
-             return d.Ctotal;
-           })
-           .attr("x", function(d) {
-             return xScale(d.Date);
-           })
-           .attr("y", function(d) {
-             return (h/2) + margin.top + yScale(d.Ctotal) + 12;
-           });
-
-         // Create Y axis (S)
-         var yAxisSM = svg.append("g")
-          .attr("class", "axis")
-          .attr("id", "yAxisS")
-          .attr("transform", "translate(" + margin.left + "," + (5 - margin.top) + ")")
-          .call(yAxisS);
-
-         // Create Y Axis (C)
-         var yAxisCM = svg.append("g")
-          .attr("class", "axis")
-          .attr("transform", "translate(" + margin.left + "," + (h/2 + margin.top) + ")")
-          .call(yAxisC);
-
-         // Create X axis
-         var xAxisM = svg.append("g")
-           .attr("class", "axis")
-           .attr("id", "xAxisG")
-           .attr("transform", "translate(0," + ((h/2) + margin.top) + ")")
-           .call(xAxis);
-
-        // Remove first and last labels on the x axis
-        d3.select("g#xAxisG")
-         .select("g.tick")
-         .remove();
-
-        d3.select("g#xAxisG")
-         .select("g.tick:last-child")
-         .remove();
-
-
-
-        });
-    </script>
+      </script>
+    </section>
   </body>
 </html>
