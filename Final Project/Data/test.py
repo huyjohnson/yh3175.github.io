@@ -1,17 +1,17 @@
-### JSON FILES
-##import json
-##import objectpath
-##
-##
-### Opening JSON file
-##f = open("allcounties_import.json")
-##
-### returns JSON object as a dictionary
-##jdata = json.load(f)
-##
-##tree_obj = objectpath.Tree(jdata)
-##
-##print(tuple(tree_obj.execute('$..FIPS')))
+# JSON FILES
+import json
+import objectpath
+
+
+# Opening JSON file
+f = open("allcounties_import.json")
+
+# returns JSON object as a dictionary
+jdata = json.loads(f)
+
+tree_obj = objectpath.Tree(jdata)
+
+print(tuple(tree_obj.execute('$..FIPS')))
 
 # CSV file
 def csv_list():
@@ -29,10 +29,10 @@ def csv_list():
     del fips[0]
     return fips
     
-# JSON FILES
-import json
-
-with open('allcounties_import.json') as json_file:
-    jdata = json.load(json_file)
-
-print(jdata['features']['FIPS'])
+### JSON FILES
+##import json
+##
+##with open('allcounties_import.json') as json_file:
+##    jdata = json.load(json_file)
+##
+##print(jdata['features']['FIPS'])

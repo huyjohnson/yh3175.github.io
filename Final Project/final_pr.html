@@ -3,19 +3,20 @@
   <head>
     <meta charset="utf-8">
     <title>Final Project - Data Vis</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script type="text/javascript" src="../d3.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-   crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-      crossorigin=""></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
       #map-us {
-        height: 960px;
-        width: 1800px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
       }
     </style>
   </head>
@@ -23,67 +24,57 @@
     <div id="map-us"></div>
     <section class="data">
 
-      <!--
-      Below is the us-states javascript file
-      Works in conjunction with the 'var geojson' line importing statesData:
-      <script type="text/javascript" src="Data/us-states.js"></script>
-      -->
-
-      <!-- Counties json javascript file (var counties_poly): -->
-      <script type="text/javascript" src="Data/gz_2010_us_050_00_5m.js"></script>
-
       <!-- Main script -->
-      <script type="text/javascript">
+      <script>
+      //this part of the example can be found at mapbox: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/
+      //you will find the accessToken and the style for your map under "Share" in your specific map in mapbox studio
+      mapboxgl.accessToken = 'pk.eyJ1IjoieWgzMTc1IiwiYSI6ImNraGdjYzR5aDBnNG4ycXFkOXc5a3U0cDQifQ.fcl-Godi2KXbDishUgaFSg';
 
-        // leaflet map
-        var map = L.map('map-us').setView([39, -98], 5);
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          subdomains: 'abcd',
-          maxZoom: 19,
-        		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-        			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        		id: 'mapbox/light-v9',
-        		tileSize: 512,
-        		zoomOffset: -1
-        	}).addTo(map);
-
-
-          // COUNTIES
-          // Line styles
-          var polyStyles = {
-            "color": "#e8e8e8",
-            "weight": .5,
-            "opacity": 1
-          };
-
-          // All counties layer
-          L.geoJSON(counties_poly, {
-            style: polyStyles
-          }).addTo(map);
-
-          // importing statesData from the us-states javascript file:
-        	// var geojson = L.geoJson(statesData).addTo(map);
+      var map = new mapboxgl.Map({
+        container: 'map-us',//thi sis the div that you have mad above in html that you are now placing your map in
+        style: 'mapbox://styles/yh3175/ckhgchrpn1c1m19pmfy0vveta',//you will find the accessToken under "Share" in your specific map in mapbox studio
+        center: [-98, 38],//the center of the map can be set to any initial value of [lng,lat]
+        zoom: 4//note that some layers have zoom limits - for example, streets and building footprints are not visible when zoomed out
+      });
 
 
 
-
-          // DATASET
-
-          // Empty variables for now:
-          var dataset; 
-
-          // Load data:
-          d3.csv("Data/Combined_amz.csv")
-            .then(function(data) {
-
-              // Copy data into global dataset
-              dataset = data;
+      //built in interactions from mapbox 1 - 7
+      //1.bounds
 
 
-            });
+      //2.zoom
+
+
+      //3.geolocation
+
+
+      //4.search
+
+
+      //5.tilt
+
+
+      //6.directions
+
+
+      //7.icons
+
+
+      //adding buttons to work with mapbox interactions 8 - 11
+
+      //8.flyto
+
+
+      //9.layers
+
+
+      //10.data
+
+
+      //11.removing mapbox logo* not recommended in real applications - please adhere to rules when using outside of class
+
+
 
       </script>
     </section>
