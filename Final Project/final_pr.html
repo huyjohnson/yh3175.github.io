@@ -68,6 +68,23 @@
         	// var geojson = L.geoJson(statesData).addTo(map);
 
 
+
+
+          // DATASET
+
+          // Empty variables for now:
+          var dataset;
+
+          // Load data:
+          d3.csv("Data/Combined.csv")
+            .then(function(data) {
+
+              // Copy data into global dataset
+              dataset = data;
+
+
+            });
+
       </script>
     </section>
   </body>
