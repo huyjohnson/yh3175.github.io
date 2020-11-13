@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Final Project - Data Vis</title>
+    <script type="text/javascript" src="../d3.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+      #map-us {
+        height: 960px;
+        width: 1800px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map-us"></div>
+    <section class="data">
+
+      <!--
+      Below is the us-states javascript file
+      Works in conjunction with the 'var geojson' line importing statesData:
+      <script type="text/javascript" src="Data/us-states.js"></script>
+      -->
+
+      <!-- Counties json javascript file (var counties_poly): -->
+      <script type="text/javascript" src="Data/gz_2010_us_050_00_5m.js"></script>
+
+      <!-- Main script -->
+      <script type="text/javascript">
+
+        // leaflet map
+        var map = L.map('map-us').setView([39, -98], 5);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19,
+        		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        		id: 'mapbox/light-v9',
+        		tileSize: 512,
+        		zoomOffset: -1
+        	}).addTo(map);
+
+
+          // COUNTIES
+          // Line styles
+          var polyStyles = {
+            "color": "#e8e8e8",
+            "weight": .5,
+            "opacity": 1
+          };
+
+          // All counties layer
+          L.geoJSON(counties_poly, {
+            style: polyStyles
+          }).addTo(map);
+
+          // importing statesData from the us-states javascript file:
+        	// var geojson = L.geoJson(statesData).addTo(map);
+
+
+      </script>
+    </section>
+  </body>
+</html>
