@@ -41,6 +41,10 @@
         transition: all .1s;
         display: block;
       }
+      .mapboxgl-popup {
+        max-width: 400px;
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      }
     </style>
   </head>
   <body>
@@ -74,25 +78,81 @@
         zoom: 4//note that some layers have zoom limits - for example, streets and building footprints are not visible when zoomed out
       });
 
-      //MOUSEOVER RIGHT PANEL EVENTS:
-      //functions for mouseover right panel:
-      function mouseover_panel() {
-        document.getElementById("right-panel").style.width = "450px";
-        document.getElementById("right-panel").style.opacity = "0.6";
-        document.getElementById("panel-txt").style.visibility = "visible";
-      }
+        //COUNTIES
+        //load counties file:
+        map.on('load', function () {
 
-      function mouseout_panel() {
-        document.getElementById("right-panel").style.width = "15px";
-        document.getElementById("right-panel").style.opacity = "0.25";
-        document.getElementById("panel-txt").style.visibility = "collapse";
-      }
+          //add data:
+          map.addSource('counties',{
+            'type':'geojson',
+            'data':'Data/Amzn_Counties2.geojson'
+          });
+
+          //change counties shape colors by SPL data:
+          map.addLayer({
+            'id':'amzn-counties',
+            'type':'fill',
+            'source':'counties',
+            'paint':{
+              'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'amzfilter_SPL_THEME1_2'],
+              -1,
+              '#F2F12D',
+              -0.5,
+              '#EED322',
+              -0.1,
+              '#E6B71E',
+              -0.05,
+              '#DA9C20',
+              0,
+              '#CA8323',
+              0.05,
+              '#B86B25',
+              0.1,
+              '#A25626',
+              0.5,
+              '#8B4225',
+              1,
+              '#723122'
+              ],
+              'fill-opacity': 0.75
+              }
+        });
+
+        //on-click functions
+        map.on('click', 'amzn-counties', function (e) {
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2+'test')
+          .addTo(map);
+        });
+
+        //mouseover
+        map.on('mouseenter', 'amzn-counties', function () {
+          map.getCanvas().style.cursor = 'pointer';
+          document.getElementById("right-panel").style.width = "450px";
+          document.getElementById("right-panel").style.opacity = "0.6";
+          document.getElementById("panel-txt").style.visibility = "visible";
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'amzn-counties', function () {
+          map.getCanvas().style.cursor = '';
+          document.getElementById("right-panel").style.width = "15px";
+          document.getElementById("right-panel").style.opacity = "0.25";
+          document.getElementById("panel-txt").style.visibility = "collapse";
+        });
+
+      });
+
 
       //mouseover eventlistener to widen the right-panel:
-      document.getElementById("right-panel").addEventListener("mouseover", mouseover_panel);
+      //document.getElementById("amzn-counties").addEventListener("mouseover", mouseover_panel);
 
       //mouseout eventlistener to release right-panel:
-      document.getElementById("right-panel").addEventListener("mouseout", mouseout_panel);
+      //document.getElementById("amzn-counties").addEventListener("mouseout", mouseout_panel);
 
       </script>
     </section>
