@@ -45,9 +45,47 @@
         max-width: 400px;
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
       }
+      /* Added 201203 shuang's code */
+      #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+      }
+      #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        text-align: center;
+      }
+      #menu a:last-child {
+        border: none;
+      }
+      #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+      }
+      #menu a.active {
+        background-color: #EED322;
+        color: #404040;
+      }
+      #menu a.active:hover {
+        background: #CA8323;
+      }
     </style>
   </head>
   <body>
+    <nav id="menu"></nav>
     <div id="map-us"></div>
     <div id="right-panel">
       <section id="panel-txt">
@@ -88,11 +126,14 @@
             'data':'Data/Amzn_Counties2.geojson'
           });
 
-          //change counties shape colors by SPL data:
+          //counties shape colors by SPL data:
           map.addLayer({
             'id':'amzn-counties',
             'type':'fill',
             'source':'counties',
+            'layout':{
+              'visibility':'visible'
+            },
             'paint':{
               'fill-color': [
               'interpolate',
@@ -121,16 +162,197 @@
               }
         });
 
+        //counties shape data for density:
+        map.addLayer({
+          'id': 'Density',
+          'type': 'fill',
+          'source': 'counties',
+          'layout':{
+            'visibility':'none'
+          },
+          'paint': {
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'amzfilter_Density'],
+              0,
+              '#f5eef8',
+              500,
+              '#ebdef0',
+              1000,
+              '#c39bd3',
+              1500,
+              '#af7ac5',
+              2000,
+              '#9b59b6',
+              2500,
+              '#633974'
+            ],
+            'fill-opacity': 0.75
+          }
+        });
+
+        // counties density rural:
+        map.addLayer({
+          'id':'Rural',
+          'type':'fill',
+          'source':'counties',
+          'filter': ['<=', 'amzfilter_Density', 800],
+          'layout':{
+            'visibility':'none'
+          },
+          'paint':{
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'amzfilter_Density'],
+              0,
+              '#f5eef8',
+              500,
+              '#ebdef0',
+              1000,
+              '#c39bd3',
+              1500,
+              '#af7ac5',
+              2000,
+              '#9b59b6',
+              2500,
+              '#633974'
+            ],
+            'fill-opacity': 0.75
+          }
+        });
+
+        // counties density suburb:
+        map.addLayer({
+          'id':'Suburb',
+          'type':'fill',
+          'source':'counties',
+          'filter': ['all',
+            ['>', 'amzfilter_Density', 800],
+            ['<=', 'amzfilter_Density', 3500]
+          ],
+          'layout':{
+            'visibility':'none'
+          },
+          'paint':{
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'amzfilter_Density'],
+              0,
+              '#f5eef8',
+              500,
+              '#ebdef0',
+              1000,
+              '#c39bd3',
+              1500,
+              '#af7ac5',
+              2000,
+              '#9b59b6',
+              2500,
+              '#633974'
+            ],
+            'fill-opacity': 0.75
+          }
+        });
+
+        // counties density urban:
+        map.addLayer({
+          'id':'Urban',
+          'type':'fill',
+          'source':'counties',
+          'filter': ['>', 'amzfilter_Density', 3500],
+          'layout':{
+            'visibility':'none'
+          },
+          'paint':{
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'amzfilter_Density'],
+              0,
+              '#f5eef8',
+              500,
+              '#ebdef0',
+              1000,
+              '#c39bd3',
+              1500,
+              '#af7ac5',
+              2000,
+              '#9b59b6',
+              2500,
+              '#633974'
+            ],
+            'fill-opacity': 0.75
+          }
+        });
+
+        //toggle - below -
+
+        //toggle menu variable:
+        //future variables:['population','theme1','lgmetro', 'mdmetro',
+        //'smmetro','micropolitan','noncore']
+        var toggleableLayerIds = ['amzn-counties', 'Density', 'Rural',
+      'Suburb', 'Urban'];
+
+        //toggle script:
+        for (var i = 0; i < toggleableLayerIds.length; i++) {
+          var id = toggleableLayerIds[i];
+
+          var link = document.createElement('a');
+          link.href = '#';
+          link.className = 'active';
+          link.textContent = id;
+
+          link.onclick = function (e) {
+            var clickedLayer = this.textContent;
+            e.preventDefault();
+            e.stopPropagation();
+
+            var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+            // toggle layer visibility by changing the layout object's visibility property
+            if (visibility === 'visible') {
+              map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+              this.className = '';
+            } else {
+              this.className = 'active';
+              map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+            }
+          };
+
+          var layers = document.getElementById('menu');
+          layers.appendChild(link);
+        }
+
         //on-click functions
+        //on click amzn-counties
         map.on('click', 'amzn-counties', function (e) {
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2+'test')
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2+' SPL_theme1_test')
           .addTo(map);
         });
 
+        //on click county density
+        map.on('click', 'Density', function(e) {
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .addTo(map);
+        });
+
+
         //mouseover
         map.on('mouseenter', 'amzn-counties', function () {
+          map.getCanvas().style.cursor = 'pointer';
+          document.getElementById("right-panel").style.width = "450px";
+          document.getElementById("right-panel").style.opacity = "0.6";
+          document.getElementById("panel-txt").style.visibility = "visible";
+        });
+
+        map.on('mouseenter', 'Density', function () {
           map.getCanvas().style.cursor = 'pointer';
           document.getElementById("right-panel").style.width = "450px";
           document.getElementById("right-panel").style.opacity = "0.6";
@@ -145,14 +367,14 @@
           document.getElementById("panel-txt").style.visibility = "collapse";
         });
 
+        map.on('mouseleave', 'Density', function () {
+          map.getCanvas().style.cursor = '';
+          document.getElementById("right-panel").style.width = "15px";
+          document.getElementById("right-panel").style.opacity = "0.25";
+          document.getElementById("panel-txt").style.visibility = "collapse";
+        });
+
       });
-
-
-      //mouseover eventlistener to widen the right-panel:
-      //document.getElementById("amzn-counties").addEventListener("mouseover", mouseover_panel);
-
-      //mouseout eventlistener to release right-panel:
-      //document.getElementById("amzn-counties").addEventListener("mouseout", mouseout_panel);
 
       </script>
     </section>
