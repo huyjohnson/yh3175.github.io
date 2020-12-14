@@ -19,6 +19,20 @@
         bottom: 0;
         width: 100%;
       }
+      #intro {
+        position: absolute;
+        left: 0;
+        bottom: 45px;
+        width: 350px;
+        z-index: 2;
+        padding: 5px;
+        text-align: center;
+        line-height: 30px;
+        padding-left: 10px;
+        color: white;
+        opacity: 0.85;
+        visibility: visible;
+      }
       #right-panel {
         position: absolute;
         right: 0;
@@ -45,14 +59,13 @@
         max-width: 400px;
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
       }
-      /* Added 201203 shuang's code */
+      /* toggle */
       #menu {
         background: #fff;
         position: absolute;
         z-index: 1;
         top: 10px;
         left: 10px;
-        border-radius: 3px;
         width: 120px;
         border: 1px solid rgba(0, 0, 0, 0.4);
         font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -87,6 +100,30 @@
   <body>
     <nav id="menu"></nav>
     <div id="map-us"></div>
+    <div id="intro">
+      <section id="left-intro">
+        <h3>Counties With Amazon Warehouses</h3>
+        <h5><em>by Jacob Hu | Shuang Bi | Yuan Li</em></h5>
+        <p>Intro Text     Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
+          fjkdlsa;jf
+          fjksdlf;jaslkjf
+          jfsdklaf;jsalkdfj;salkdf\<br>
+          Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
+            fjkdlsa;jf
+            fjksdlf;jaslkjf
+            jfsdklaf;jsalkdfj;salkdf\
+            Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
+              fjkdlsa;jf
+              fjksdlf;jaslkjf
+              jfsdklaf;jsalkdfj;salkdf\
+              Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
+                fjkdlsa;jf
+                fjksdlf;jaslkjf
+                jfsdklaf;jsalkdfj;salkdf\</p>
+        <hr>
+        <p><b>To get started, please use the toggle menu above.<b></p>
+      </section>
+    </div>
     <div id="right-panel">
       <section id="panel-txt">
         <h4>Title of this portion</h4>
@@ -132,7 +169,7 @@
             'type':'fill',
             'source':'counties',
             'layout':{
-              'visibility':'visible'
+              'visibility':'none'
             },
             'paint':{
               'fill-color': [
@@ -302,7 +339,7 @@
 
           var link = document.createElement('a');
           link.href = '#';
-          link.className = 'active';
+          link.className = '';
           link.textContent = id;
 
           link.onclick = function (e) {
@@ -312,10 +349,20 @@
 
             var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
 
+            //map zooms out
+            map.flyTo({
+              center: [-98, 38],
+              zoom: 4
+            });
+
+            //show intro paragraph once map zooms out again
+            document.getElementById('intro').style.visibility = "visible";
+
             // toggle layer visibility by changing the layout object's visibility property
             if (visibility === 'visible') {
               map.setLayoutProperty(clickedLayer, 'visibility', 'none');
               this.className = '';
+              document.getElementById('intro').style.visibility = "visible";
             } else {
               this.className = 'active';
               map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
@@ -329,6 +376,11 @@
         //on-click functions
         //on click amzn-counties
         map.on('click', 'amzn-counties', function (e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
           .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2+' SPL_theme1_test')
@@ -337,12 +389,16 @@
 
         //on click county density
         map.on('click', 'Density', function(e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
           .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
           .addTo(map);
         });
-
 
         //mouseover
         map.on('mouseenter', 'amzn-counties', function () {
