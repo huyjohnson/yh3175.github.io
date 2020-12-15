@@ -397,6 +397,17 @@
         });
 
         //on click county densities:
+        map.on('click', 'Density', function(e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .addTo(map);
+        });
         map.on('click', 'Rural', function(e) {
           map.flyTo({
             center: e.lngLat,
