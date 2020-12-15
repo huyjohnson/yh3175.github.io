@@ -23,7 +23,7 @@
         position: absolute;
         left: 0;
         bottom: 45px;
-        width: 350px;
+        width: 425px;
         z-index: 2;
         padding: 5px;
         text-align: center;
@@ -149,7 +149,7 @@
       var map = new mapboxgl.Map({
         container: 'map-us',//thi sis the div that you have mad above in html that you are now placing your map in
         style: 'mapbox://styles/yh3175/ckhgchrpn1c1m19pmfy0vveta',//you will find the accessToken under "Share" in your specific map in mapbox studio
-        center: [-98, 38],//the center of the map can be set to any initial value of [lng,lat]
+        center: [-104, 38],//the center of the map can be set to any initial value of [lng,lat]
         zoom: 4//note that some layers have zoom limits - for example, streets and building footprints are not visible when zoomed out
       });
 
@@ -330,17 +330,26 @@
         //toggle menu variable:
         //future variables:['population','theme1','lgmetro', 'mdmetro',
         //'smmetro','micropolitan','noncore']
+
         var toggleableLayerIds = ['amzn-counties', 'Density', 'Rural',
-      'Suburb', 'Urban'];
+        'Suburb', 'Urban'];
 
         //toggle script:
         for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
 
           var link = document.createElement('a');
-          link.href = '#';
-          link.className = '';
-          link.textContent = id;
+
+          if (i == 0) {
+            link.href = '#';
+            link.className = 'active';
+            link.textContent = id;
+            map.setLayoutProperty('amzn-counties', 'visibility', 'visible');
+          } else {
+            link.href = '#';
+            link.className = '';
+            link.textContent = id;
+          }
 
           link.onclick = function (e) {
             var clickedLayer = this.textContent;
@@ -351,7 +360,7 @@
 
             //map zooms out
             map.flyTo({
-              center: [-98, 38],
+              center: [-104, 38],
               zoom: 4
             });
 
@@ -371,7 +380,7 @@
 
           var layers = document.getElementById('menu');
           layers.appendChild(link);
-        }
+        };
 
         //on-click functions
         //on click amzn-counties
@@ -387,8 +396,30 @@
           .addTo(map);
         });
 
-        //on click county density
-        map.on('click', 'Density', function(e) {
+        //on click county densities:
+        map.on('click', 'Rural', function(e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .addTo(map);
+        });
+        map.on('click', 'Suburb', function(e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .addTo(map);
+        });
+        map.on('click', 'Urban', function(e) {
           map.flyTo({
             center: e.lngLat,
             zoom: 9
@@ -407,8 +438,25 @@
           document.getElementById("right-panel").style.opacity = "0.6";
           document.getElementById("panel-txt").style.visibility = "visible";
         });
-
         map.on('mouseenter', 'Density', function () {
+          map.getCanvas().style.cursor = 'pointer';
+          document.getElementById("right-panel").style.width = "450px";
+          document.getElementById("right-panel").style.opacity = "0.6";
+          document.getElementById("panel-txt").style.visibility = "visible";
+        });
+        map.on('mouseenter', 'Rural', function () {
+          map.getCanvas().style.cursor = 'pointer';
+          document.getElementById("right-panel").style.width = "450px";
+          document.getElementById("right-panel").style.opacity = "0.6";
+          document.getElementById("panel-txt").style.visibility = "visible";
+        });
+        map.on('mouseenter', 'Suburb', function () {
+          map.getCanvas().style.cursor = 'pointer';
+          document.getElementById("right-panel").style.width = "450px";
+          document.getElementById("right-panel").style.opacity = "0.6";
+          document.getElementById("panel-txt").style.visibility = "visible";
+        });
+        map.on('mouseenter', 'Urban', function () {
           map.getCanvas().style.cursor = 'pointer';
           document.getElementById("right-panel").style.width = "450px";
           document.getElementById("right-panel").style.opacity = "0.6";
@@ -422,14 +470,30 @@
           document.getElementById("right-panel").style.opacity = "0.25";
           document.getElementById("panel-txt").style.visibility = "collapse";
         });
-
         map.on('mouseleave', 'Density', function () {
           map.getCanvas().style.cursor = '';
           document.getElementById("right-panel").style.width = "15px";
           document.getElementById("right-panel").style.opacity = "0.25";
           document.getElementById("panel-txt").style.visibility = "collapse";
         });
-
+        map.on('mouseleave', 'Rural', function () {
+          map.getCanvas().style.cursor = '';
+          document.getElementById("right-panel").style.width = "15px";
+          document.getElementById("right-panel").style.opacity = "0.25";
+          document.getElementById("panel-txt").style.visibility = "collapse";
+        });
+        map.on('mouseleave', 'Suburb', function () {
+          map.getCanvas().style.cursor = '';
+          document.getElementById("right-panel").style.width = "15px";
+          document.getElementById("right-panel").style.opacity = "0.25";
+          document.getElementById("panel-txt").style.visibility = "collapse";
+        });
+        map.on('mouseleave', 'Urban', function () {
+          map.getCanvas().style.cursor = '';
+          document.getElementById("right-panel").style.width = "15px";
+          document.getElementById("right-panel").style.opacity = "0.25";
+          document.getElementById("panel-txt").style.visibility = "collapse";
+        });
       });
 
       </script>
