@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../d3.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
       body {
         margin: 0;
@@ -19,14 +20,42 @@
         bottom: 0;
         width: 100%;
       }
+      .chartB {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        left: 140px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+      }
+
+      .chartB:hover {
+        background-color: #b03a2e;
+        color: white;
+    }
+
+    #button1{
+        top: 132px;
+      }
+    #button2{
+        top: 174px;
+    }
+    #button3{
+
+        top: 215px;
+    }
+    #button4{
+        top: 236px;
+    }
+
+
       #intro {
         position: absolute;
         left: 0;
-        bottom: 45px;
+        bottom: 25px;
         width: 425px;
         z-index: 2;
         padding: 5px;
-        text-align: center;
         line-height: 30px;
         padding-left: 10px;
         color: white;
@@ -78,31 +107,133 @@
       #menu a.active:hover {
         background: #CA8323;
       }
+
+      .map-overlay {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.5);
+        margin-right: 20px;
+        overflow: auto;
+        font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+      }
+      .map-overlay2 {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin-right: 20px;
+        overflow: auto;
+        color:white;
+        font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+      }
+
+      #legend {
+        font-size: 13px;
+        padding: 10px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+      .row {
+        height: 12px;
+        width: 100%;
+      }
+      .colors2 {
+        background: linear-gradient(to left,#b03a2e,#e74c3c,#ec7063,#f1948a,#fadbd8,#fdfefe,#d4efdf,#a9dfbf,#52be80,#27ae60,#1e8449);
+        fill-opacity: 0.75;
+        margin-bottom: 5px;
+      }
+
+      .colors1 {
+        background: linear-gradient(to right,#55552b,#888844,#bbbb77,#ddddbb,#ffffff,#f0b27a,#df9f9f,#c65353,#993333,#602020);
+        fill-opacity: 0.75;
+        margin-bottom: 5px;
+      }
+
+
+      .label1 {
+        width: 8%;
+        display: inline-block;
+        text-align: center;
+        font-size: small;
+        color:white;
+      }
+
+      .label2 {
+        width: 8%;
+        display: inline-block;
+        text-align: center;
+        font-size: small;
+        color:white;
+      }
+
+
     </style>
   </head>
   <body>
     <nav id="menu"></nav>
+    <a target='_blank' class="chartB w3-button w3-padding-small" id="button1"
+    style = "font-size: 0.8em" href="./urban_chart.html">Chart</a>
+
+    <a target='_blank' class="chartB w3-button w3-padding-small w3-" id="button2"
+    style = "font-size: 0.8em"  href="./suburban_chart.html">Chart</a>
+
+    <a target='_blank' class="chartB w3-button w3-padding-small w3-" id="button3"
+    style = "font-size: 0.8em"  href="./rural_chart.html">Chart</a>
+
     <div id="map-us"></div>
+
+
+
+    <div class='map-overlay2' id='legend'>
+        <p style = 'margin-top: 0; font-size:1em'> Percentile Ranking of Socio-econ Indicator in 2018 SVI Data</p>
+
+        <div class='row colors1'></div>
+        <div class='row labels'>
+           <div class = 'label1'>0</div>
+           <div class = 'label1'>10%</div>
+           <div class = 'label1'>20%</div>
+           <div class = 'label1'>30%</div>
+           <div class = 'label1'>40%</div>
+           <div class = 'label1'>50%</div>
+           <div class = 'label1'>60%</div>
+           <div class = 'label1'>70%</div>
+           <div class = 'label1'>80%</div>
+           <div class = 'label1'>90%</div>
+           <div class = 'label1'>100%</div>
+        </div>
+
+      <p style = 'margin-top: 3; font-size:1em'>Percentage Change of Socio-econ Indicator from 2014 to 2018</p>
+
+      <div class='row colors2'></div>
+      <div class='row labels'>
+         <div class = 'label2'>-50%</div>
+         <div class = 'label2'>-40%</div>
+         <div class = 'label2'>-30%</div>
+         <div class = 'label2'>-20%</div>
+         <div class = 'label2'>-10%</div>
+         <div class = 'label2'>0</div>
+         <div class = 'label2'>10%</div>
+         <div class = 'label2'>20%</div>
+         <div class = 'label2'>30%</div>
+         <div class = 'label2'>40%</div>
+         <div class = 'label2'>50%</div>
+      </div>
+      <p style="font: size 0.7; em;font-style: italic">Indicator = EPL_POV + EPL_UNEMP + EPL_PCI + EPL_NOHSDP<br>
+    Bigger number means bigger social-economic vulnerability</p>
+
+  </div>
     <div id="intro">
       <section id="left-intro">
         <h3>Counties With Amazon Warehouses</h3>
-        <h5><em>by Jacob Hu | Shuang Bi | Yuan Li</em></h5>
-        <p>Intro Text     Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
-          fjkdlsa;jf
-          fjksdlf;jaslkjf
-          jfsdklaf;jsalkdfj;salkdf\<br>
-          Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
-            fjkdlsa;jf
-            fjksdlf;jaslkjf
-            jfsdklaf;jsalkdfj;salkdf\
-            Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
-              fjkdlsa;jf
-              fjksdlf;jaslkjf
-              jfsdklaf;jsalkdfj;salkdf\
-              Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
-                fjkdlsa;jf
-                fjksdlf;jaslkjf
-                jfsdklaf;jsalkdfj;salkdf\</p>
+        <h5><em>by Jacob Hu | Shuang Bi | Yuan Li</em></h5><br>
+        <p>When everything came to a halt during this pandemic, Amazon speeded up its operation...
+            The company refused to shut down their facilities, taking advantage of the economic desperation caused by COVID to increase its market dominance.
+            By 2021, there will be <b>498</b> Amazon warehouses in the U.S., across <b>204</b> counties and <b>42</b> states.<br><br>
+            Looking at the sociol economic indicator from <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/index.html">CDC SVI data </a>in counties with Amazon warehouses,
+            we found that Amazon came to the relatively vulnerable communites and local SVI improved from 2014 to 2018,
+            It aligned with the reason why local government invited Amazon, but was not sufficient to describe the
+            <a href="https://www.ufcw.org/press-releases/ftcamazon/#:~:text=%E2%80%9CAmazon%20represents%20a%20clear%20and,employees%20throughout%20its%20distribution%20centers.">>deteriorated working conditions</a> in these warehouses...
+        </p>
         <hr>
         <p><b>To get started, please use the toggle menu above.<b></p>
       </section>
@@ -114,6 +245,8 @@
       //this part of the example can be found at mapbox: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/
       //you will find the accessToken and the style for your map under "Share" in your specific map in mapbox studio
       mapboxgl.accessToken = 'pk.eyJ1IjoieWgzMTc1IiwiYSI6ImNraGdjYzR5aDBnNG4ycXFkOXc5a3U0cDQifQ.fcl-Godi2KXbDishUgaFSg';
+
+
 
       //mapbox
       var map = new mapboxgl.Map({
@@ -130,7 +263,7 @@
           //add data:
           map.addSource('counties',{
             'type':'geojson',
-            'data':'Data/Amzn_Counties2.geojson'
+            'data':'Data/Amzn_Counties3.geojson'
           });
 
           //counties shape colors by SPL data:
@@ -145,27 +278,27 @@
               'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_SPL_THEME1'],
+              ['get', 'amzfilter_RPL_THEME4_1'],
               0,
-              '#fdf2e9',
-              0.33,
-              '#fae5d3',
-              0.66,
-              '#f5cba7',
-              1,
+              '#55552b',
+              0.1,
+              '#888844',
+              0.2,
+              '#bbbb77',
+              0.3,
+              '#ddddbb',
+              0.4,
+              '#ffffff',
+              0.5,
               '#f0b27a',
-              1.33,
-              '#eb984e',
-              1.66,
-              '#e67e22',
-              2,
-              '#ca6f1e',
-              2.33,
-              '#af601a',
-              2.66,
-              '#935116',
-              3,
-              '#784212'
+              0.6,
+              '#df9f9f',
+              0.7,
+              '#c65353',
+              0.8,
+              '#993333',
+              0.9,
+              '#602020'
               ],
               'fill-opacity': 0.75
               }
@@ -182,28 +315,28 @@
             'fill-color': [
             'interpolate',
             ['linear'],
-            ['get', 'amzfilter_SPL_THEME1_1'],
+            ['get', 'amzfilter_RPL_THEME4_1'],
             0,
-            '#fdf2e9',
-            0.33,
-            '#fae5d3',
-            0.66,
-            '#f5cba7',
-            1,
-            '#f0b27a',
-            1.33,
-            '#eb984e',
-            1.66,
-            '#e67e22',
-            2,
-            '#ca6f1e',
-            2.33,
-            '#af601a',
-            2.66,
-            '#935116',
-            3,
-            '#784212'
-            ],
+              '#55552b',
+              0.1,
+              '#888844',
+              0.2,
+              '#bbbb77',
+              0.3,
+              '#ddddbb',
+              0.4,
+              '#ffffff',
+              0.5,
+              '#f0b27a',
+              0.6,
+              '#df9f9f',
+              0.7,
+              '#c65353',
+              0.8,
+              '#993333',
+              0.9,
+              '#602020'
+              ],
             'fill-opacity': 0.75
             }
         });
@@ -219,29 +352,29 @@
             'fill-color': [
             'interpolate',
             ['linear'],
-            ['get', 'amzfilter_SPL_THEME1_2'],
+            ['get', 'amzfilter_RPL_THEME1_3'],
             -0.5,
-            '#b03a2e',
+            '#1e8449',
             -0.4,
-            '#e74c3c',
+            '#27ae60',
             -0.3,
-            '#ec7063',
+            '#52be80',
             -0.2,
-            '#f1948a',
+            '#a9dfbf',
             -0.1,
-            '#fadbd8',
+            '#d4efdf',
             0,
             '#fdfefe',
             0.1,
-            '#d4efdf',
+            '#fadbd8',
             0.2,
-            '#a9dfbf',
+            '#f1948a',
             0.3,
-            '#52be80',
+            '#ec7063',
             0.4,
-            '#27ae60',
+            '#e74c3c',
             0.5,
-            '#1e8449'
+            '#b03a2e',
             ],
             'fill-opacity': 0.75
             }
@@ -260,29 +393,29 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_SPL_THEME1_2'],
+              ['get', 'amzfilter_RPL_THEME1_3'],
               -0.5,
-              '#b03a2e',
-              -0.4,
-              '#e74c3c',
-              -0.3,
-              '#ec7063',
-              -0.2,
-              '#f1948a',
-              -0.1,
-              '#fadbd8',
-              0,
-              '#fdfefe',
-              0.1,
-              '#d4efdf',
-              0.2,
-              '#a9dfbf',
-              0.3,
-              '#52be80',
-              0.4,
-              '#27ae60',
-              0.5,
-              '#1e8449'
+            '#1e8449',
+            -0.4,
+            '#27ae60',
+            -0.3,
+            '#52be80',
+            -0.2,
+            '#a9dfbf',
+            -0.1,
+            '#d4efdf',
+            0,
+            '#fdfefe',
+            0.1,
+            '#fadbd8',
+            0.2,
+            '#f1948a',
+            0.3,
+            '#ec7063',
+            0.4,
+            '#e74c3c',
+            0.5,
+            '#b03a2e',
               ],
               'fill-opacity': 0.75
               }
@@ -303,29 +436,29 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_SPL_THEME1_2'],
+              ['get', 'amzfilter_RPL_THEME1_3'],
               -0.5,
-              '#b03a2e',
-              -0.4,
-              '#e74c3c',
-              -0.3,
-              '#ec7063',
-              -0.2,
-              '#f1948a',
-              -0.1,
-              '#fadbd8',
-              0,
-              '#fdfefe',
-              0.1,
-              '#d4efdf',
-              0.2,
-              '#a9dfbf',
-              0.3,
-              '#52be80',
-              0.4,
-              '#27ae60',
-              0.5,
-              '#1e8449'
+            '#1e8449',
+            -0.4,
+            '#27ae60',
+            -0.3,
+            '#52be80',
+            -0.2,
+            '#a9dfbf',
+            -0.1,
+            '#d4efdf',
+            0,
+            '#fdfefe',
+            0.1,
+            '#fadbd8',
+            0.2,
+            '#f1948a',
+            0.3,
+            '#ec7063',
+            0.4,
+            '#e74c3c',
+            0.5,
+            '#b03a2e',
             ],
             'fill-opacity': 0.75
           }
@@ -346,29 +479,29 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_SPL_THEME1_2'],
+              ['get', 'amzfilter_RPL_THEME1_3'],
               -0.5,
-              '#b03a2e',
-              -0.4,
-              '#e74c3c',
-              -0.3,
-              '#ec7063',
-              -0.2,
-              '#f1948a',
-              -0.1,
-              '#fadbd8',
-              0,
-              '#fdfefe',
-              0.1,
-              '#d4efdf',
-              0.2,
-              '#a9dfbf',
-              0.3,
-              '#52be80',
-              0.4,
-              '#27ae60',
-              0.5,
-              '#1e8449'
+            '#1e8449',
+            -0.4,
+            '#27ae60',
+            -0.3,
+            '#52be80',
+            -0.2,
+            '#a9dfbf',
+            -0.1,
+            '#d4efdf',
+            0,
+            '#fdfefe',
+            0.1,
+            '#fadbd8',
+            0.2,
+            '#f1948a',
+            0.3,
+            '#ec7063',
+            0.4,
+            '#e74c3c',
+            0.5,
+            '#b03a2e',
             ],
             'fill-opacity': 0.75
           }
@@ -386,29 +519,29 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_SPL_THEME1_2'],
+              ['get', 'amzfilter_RPL_THEME1_3'],
               -0.5,
-              '#b03a2e',
-              -0.4,
-              '#e74c3c',
-              -0.3,
-              '#ec7063',
-              -0.2,
-              '#f1948a',
-              -0.1,
-              '#fadbd8',
-              0,
-              '#fdfefe',
-              0.1,
-              '#d4efdf',
-              0.2,
-              '#a9dfbf',
-              0.3,
-              '#52be80',
-              0.4,
-              '#27ae60',
-              0.5,
-              '#1e8449'
+            '#1e8449',
+            -0.4,
+            '#27ae60',
+            -0.3,
+            '#52be80',
+            -0.2,
+            '#a9dfbf',
+            -0.1,
+            '#d4efdf',
+            0,
+            '#fdfefe',
+            0.1,
+            '#fadbd8',
+            0.2,
+            '#f1948a',
+            0.3,
+            '#ec7063',
+            0.4,
+            '#e74c3c',
+            0.5,
+            '#b03a2e',
             ],
             'fill-opacity': 0.75
           }
@@ -418,7 +551,7 @@
         //toggle - below -
 
         //toggle menu variable:
-        //future variables:['population','theme1','lgmetro', 'mdmetro',
+        //future variables:['population','THEME4','lgmetro', 'mdmetro',
         //'smmetro','micropolitan','noncore']
 
         var toggleableLayerIds = ['SVI Change', '2018 SVI', '2014 SVI',
@@ -482,7 +615,7 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1)
+          .setHTML((e.features[0].properties.amzfilter_RPL_THEME4_1).toFixed(4)*100+'%')
           .addTo(map);
         });
 
@@ -494,7 +627,7 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_1)
+          .setHTML((e.features[0].properties.amzfilter_RPL_THEME4_1).toFixed(4)*100+'%')
           .addTo(map);
         });
 
@@ -504,13 +637,14 @@
             zoom: 9
           });
           document.getElementById('intro').style.visibility = "hidden";
+          var p = e.features[0].properties;
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
+          .setHTML((p.amzfilter_RPL_THEME1_3).toFixed(4)*100 + '% Change')
           .addTo(map);
         });
 
-        //on click county densities:
+        //on click county population:
         map.on('click', 'Micropolitan', function(e) {
           map.flyTo({
             center: e.lngLat,
@@ -519,7 +653,7 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
+          .setHTML((e.features[0].properties.amzfilter_RPL_THEME1_3).toFixed(4)*100 + '% Change')
           .addTo(map);
         });
         map.on('click', 'Small Metro', function(e) {
@@ -530,7 +664,7 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
+          .setHTML((e.features[0].properties.amzfilter_RPL_THEME1_3).toFixed(4)*100 + '% Change')
           .addTo(map);
         });
         map.on('click', 'Medium Metro', function(e) {
@@ -541,7 +675,7 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
+          .setHTML((e.features[0].properties.amzfilter_RPL_THEME1_3).toFixed(4)*100 + '% Change')
           .addTo(map);
         });
         map.on('click', 'Large Metro', function(e) {
@@ -552,7 +686,7 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
+          .setHTML((e.features[0].properties.amzfilter_RPL_THEME1_3).toFixed(4)*100 + '% Change')
           .addTo(map);
         });
 
