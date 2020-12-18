@@ -33,23 +33,6 @@
         opacity: 0.85;
         visibility: visible;
       }
-      #right-panel {
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 20px;
-        width: 15px;
-        z-index: 2;
-        background-color: black;
-        padding: 5px;
-        text-align: center;
-        line-height: 30px;
-        padding-left: 10px;
-        color: white;
-        opacity: 0.25;
-        transition: all 1.2s;
-        overflow-x: hidden;
-      }
       #panel-txt {
         visibility: collapse;
         transition: all .1s;
@@ -124,19 +107,6 @@
         <p><b>To get started, please use the toggle menu above.<b></p>
       </section>
     </div>
-    <div id="right-panel">
-      <section id="panel-txt">
-        <h4>Title of this portion</h4>
-        <p>Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
-          fjkdlsa;jf
-          fjksdlf;jaslkjf
-          jfsdklaf;jsalkdfj;salkdf\</p>
-        <p>Textdsakfjd;glksajdf;lksajdfl;ks fjdksalf;ja;sldkfj
-          fjkdlsa;jf
-          fjksdlf;jaslkjf
-          jfsdklaf;jsalkdfj;salkdf\</p>
-      </section>
-    </div>
     <section class="data">
 
       <!-- Main script -->
@@ -165,7 +135,7 @@
 
           //counties shape colors by SPL data:
           map.addLayer({
-            'id':'amzn-counties',
+            'id':'2018 SVI',
             'type':'fill',
             'source':'counties',
             'layout':{
@@ -175,66 +145,114 @@
               'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_SPL_THEME1_2'],
-              -1,
-              '#F2F12D',
-              -0.5,
-              '#EED322',
-              -0.1,
-              '#E6B71E',
-              -0.05,
-              '#DA9C20',
+              ['get', 'amzfilter_SPL_THEME1'],
               0,
-              '#CA8323',
-              0.05,
-              '#B86B25',
-              0.1,
-              '#A25626',
-              0.5,
-              '#8B4225',
+              '#fdf2e9',
+              0.33,
+              '#fae5d3',
+              0.66,
+              '#f5cba7',
               1,
-              '#723122'
+              '#f0b27a',
+              1.33,
+              '#eb984e',
+              1.66,
+              '#e67e22',
+              2,
+              '#ca6f1e',
+              2.33,
+              '#af601a',
+              2.66,
+              '#935116',
+              3,
+              '#784212'
               ],
               'fill-opacity': 0.75
               }
         });
 
-        //counties shape data for density:
         map.addLayer({
-          'id': 'Density',
-          'type': 'fill',
-          'source': 'counties',
+          'id':'2014 SVI',
+          'type':'fill',
+          'source':'counties',
           'layout':{
             'visibility':'none'
           },
-          'paint': {
+          'paint':{
             'fill-color': [
-              'interpolate',
-              ['linear'],
-              ['get', 'amzfilter_Density'],
-              0,
-              '#f5eef8',
-              500,
-              '#ebdef0',
-              1000,
-              '#c39bd3',
-              1500,
-              '#af7ac5',
-              2000,
-              '#9b59b6',
-              2500,
-              '#633974'
+            'interpolate',
+            ['linear'],
+            ['get', 'amzfilter_SPL_THEME1_1'],
+            0,
+            '#fdf2e9',
+            0.33,
+            '#fae5d3',
+            0.66,
+            '#f5cba7',
+            1,
+            '#f0b27a',
+            1.33,
+            '#eb984e',
+            1.66,
+            '#e67e22',
+            2,
+            '#ca6f1e',
+            2.33,
+            '#af601a',
+            2.66,
+            '#935116',
+            3,
+            '#784212'
             ],
             'fill-opacity': 0.75
-          }
+            }
         });
 
-        // counties density rural:
         map.addLayer({
-          'id':'Rural',
+          'id':'SVI Change',
           'type':'fill',
           'source':'counties',
-          'filter': ['<=', 'amzfilter_Density', 800],
+          'layout':{
+            'visibility':'none'
+          },
+          'paint':{
+            'fill-color': [
+            'interpolate',
+            ['linear'],
+            ['get', 'amzfilter_SPL_THEME1_2'],
+            -0.5,
+            '#b03a2e',
+            -0.4,
+            '#e74c3c',
+            -0.3,
+            '#ec7063',
+            -0.2,
+            '#f1948a',
+            -0.1,
+            '#fadbd8',
+            0,
+            '#fdfefe',
+            0.1,
+            '#d4efdf',
+            0.2,
+            '#a9dfbf',
+            0.3,
+            '#52be80',
+            0.4,
+            '#27ae60',
+            0.5,
+            '#1e8449'
+            ],
+            'fill-opacity': 0.75
+            }
+        });
+
+        // counties shape data for population:
+        map.addLayer({
+          'id':'Micropolitan',
+          'type':'fill',
+          'source':'counties',
+          'filter': ['<=', 'amzfilter_E_TOTPOP_1', 49999],
           'layout':{
             'visibility':'none'
           },
@@ -242,32 +260,41 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_Density'],
+              ['get', 'amzfilter_SPL_THEME1_2'],
+              -0.5,
+              '#b03a2e',
+              -0.4,
+              '#e74c3c',
+              -0.3,
+              '#ec7063',
+              -0.2,
+              '#f1948a',
+              -0.1,
+              '#fadbd8',
               0,
-              '#f5eef8',
-              500,
-              '#ebdef0',
-              1000,
-              '#c39bd3',
-              1500,
-              '#af7ac5',
-              2000,
-              '#9b59b6',
-              2500,
-              '#633974'
-            ],
-            'fill-opacity': 0.75
-          }
+              '#fdfefe',
+              0.1,
+              '#d4efdf',
+              0.2,
+              '#a9dfbf',
+              0.3,
+              '#52be80',
+              0.4,
+              '#27ae60',
+              0.5,
+              '#1e8449'
+              ],
+              'fill-opacity': 0.75
+              }
         });
 
-        // counties density suburb:
         map.addLayer({
-          'id':'Suburb',
+          'id':'Small Metro',
           'type':'fill',
           'source':'counties',
           'filter': ['all',
-            ['>', 'amzfilter_Density', 800],
-            ['<=', 'amzfilter_Density', 3500]
+            ['>', 'amzfilter_E_TOTPOP_1', 49999],
+            ['<=', 'amzfilter_E_TOTPOP_1', 250000]
           ],
           'layout':{
             'visibility':'none'
@@ -276,30 +303,42 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_Density'],
+              ['get', 'amzfilter_SPL_THEME1_2'],
+              -0.5,
+              '#b03a2e',
+              -0.4,
+              '#e74c3c',
+              -0.3,
+              '#ec7063',
+              -0.2,
+              '#f1948a',
+              -0.1,
+              '#fadbd8',
               0,
-              '#f5eef8',
-              500,
-              '#ebdef0',
-              1000,
-              '#c39bd3',
-              1500,
-              '#af7ac5',
-              2000,
-              '#9b59b6',
-              2500,
-              '#633974'
+              '#fdfefe',
+              0.1,
+              '#d4efdf',
+              0.2,
+              '#a9dfbf',
+              0.3,
+              '#52be80',
+              0.4,
+              '#27ae60',
+              0.5,
+              '#1e8449'
             ],
             'fill-opacity': 0.75
           }
         });
 
-        // counties density urban:
         map.addLayer({
-          'id':'Urban',
+          'id':'Medium Metro',
           'type':'fill',
           'source':'counties',
-          'filter': ['>', 'amzfilter_Density', 3500],
+          'filter': ['all',
+            ['>', 'amzfilter_E_TOTPOP_1', 250000],
+            ['<=', 'amzfilter_E_TOTPOP_1', 999999]
+          ],
           'layout':{
             'visibility':'none'
           },
@@ -307,23 +346,74 @@
             'fill-color': [
               'interpolate',
               ['linear'],
-              ['get', 'amzfilter_Density'],
+              ['get', 'amzfilter_SPL_THEME1_2'],
+              -0.5,
+              '#b03a2e',
+              -0.4,
+              '#e74c3c',
+              -0.3,
+              '#ec7063',
+              -0.2,
+              '#f1948a',
+              -0.1,
+              '#fadbd8',
               0,
-              '#f5eef8',
-              500,
-              '#ebdef0',
-              1000,
-              '#c39bd3',
-              1500,
-              '#af7ac5',
-              2000,
-              '#9b59b6',
-              2500,
-              '#633974'
+              '#fdfefe',
+              0.1,
+              '#d4efdf',
+              0.2,
+              '#a9dfbf',
+              0.3,
+              '#52be80',
+              0.4,
+              '#27ae60',
+              0.5,
+              '#1e8449'
             ],
             'fill-opacity': 0.75
           }
         });
+
+        map.addLayer({
+          'id':'Large Metro',
+          'type':'fill',
+          'source':'counties',
+          'filter': ['>', 'amzfilter_E_TOTPOP_1', 999999],
+          'layout':{
+            'visibility':'none'
+          },
+          'paint':{
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'amzfilter_SPL_THEME1_2'],
+              -0.5,
+              '#b03a2e',
+              -0.4,
+              '#e74c3c',
+              -0.3,
+              '#ec7063',
+              -0.2,
+              '#f1948a',
+              -0.1,
+              '#fadbd8',
+              0,
+              '#fdfefe',
+              0.1,
+              '#d4efdf',
+              0.2,
+              '#a9dfbf',
+              0.3,
+              '#52be80',
+              0.4,
+              '#27ae60',
+              0.5,
+              '#1e8449'
+            ],
+            'fill-opacity': 0.75
+          }
+        });
+
 
         //toggle - below -
 
@@ -331,8 +421,8 @@
         //future variables:['population','theme1','lgmetro', 'mdmetro',
         //'smmetro','micropolitan','noncore']
 
-        var toggleableLayerIds = ['amzn-counties', 'Density', 'Rural',
-        'Suburb', 'Urban'];
+        var toggleableLayerIds = ['SVI Change', '2018 SVI', '2014 SVI',
+        'Micropolitan', 'Small Metro', 'Medium Metro', 'Large Metro'];
 
         //toggle script:
         for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -344,7 +434,7 @@
             link.href = '#';
             link.className = 'active';
             link.textContent = id;
-            map.setLayoutProperty('amzn-counties', 'visibility', 'visible');
+            map.setLayoutProperty('SVI Change', 'visibility', 'visible');
           } else {
             link.href = '#';
             link.className = '';
@@ -383,8 +473,8 @@
         };
 
         //on-click functions
-        //on click amzn-counties
-        map.on('click', 'amzn-counties', function (e) {
+        //on click SVI figures
+        map.on('click', '2018 SVI', function (e) {
           map.flyTo({
             center: e.lngLat,
             zoom: 9
@@ -392,12 +482,36 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2+' SPL_theme1_test')
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1)
+          .addTo(map);
+        });
+
+        map.on('click', '2014 SVI', function (e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_1)
+          .addTo(map);
+        });
+
+        map.on('click', 'SVI Change', function (e) {
+          map.flyTo({
+            center: e.lngLat,
+            zoom: 9
+          });
+          document.getElementById('intro').style.visibility = "hidden";
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
           .addTo(map);
         });
 
         //on click county densities:
-        map.on('click', 'Density', function(e) {
+        map.on('click', 'Micropolitan', function(e) {
           map.flyTo({
             center: e.lngLat,
             zoom: 9
@@ -405,10 +519,10 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
           .addTo(map);
         });
-        map.on('click', 'Rural', function(e) {
+        map.on('click', 'Small Metro', function(e) {
           map.flyTo({
             center: e.lngLat,
             zoom: 9
@@ -416,10 +530,10 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
           .addTo(map);
         });
-        map.on('click', 'Suburb', function(e) {
+        map.on('click', 'Medium Metro', function(e) {
           map.flyTo({
             center: e.lngLat,
             zoom: 9
@@ -427,10 +541,10 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
           .addTo(map);
         });
-        map.on('click', 'Urban', function(e) {
+        map.on('click', 'Large Metro', function(e) {
           map.flyTo({
             center: e.lngLat,
             zoom: 9
@@ -438,72 +552,54 @@
           document.getElementById('intro').style.visibility = "hidden";
           new mapboxgl.Popup()
           .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.amzfilter_Density + ' Density_test')
+          .setHTML(e.features[0].properties.amzfilter_SPL_THEME1_2 + ' Change')
           .addTo(map);
         });
 
         //mouseover
-        map.on('mouseenter', 'amzn-counties', function () {
+        map.on('mouseenter', '2018 SVI', function () {
           map.getCanvas().style.cursor = 'pointer';
-          document.getElementById("right-panel").style.width = "450px";
-          document.getElementById("right-panel").style.opacity = "0.6";
-          document.getElementById("panel-txt").style.visibility = "visible";
         });
-        map.on('mouseenter', 'Density', function () {
+        map.on('mouseenter', '2014 SVI', function () {
           map.getCanvas().style.cursor = 'pointer';
-          document.getElementById("right-panel").style.width = "450px";
-          document.getElementById("right-panel").style.opacity = "0.6";
-          document.getElementById("panel-txt").style.visibility = "visible";
         });
-        map.on('mouseenter', 'Rural', function () {
+        map.on('mouseenter', 'SVI Change', function () {
           map.getCanvas().style.cursor = 'pointer';
-          document.getElementById("right-panel").style.width = "450px";
-          document.getElementById("right-panel").style.opacity = "0.6";
-          document.getElementById("panel-txt").style.visibility = "visible";
         });
-        map.on('mouseenter', 'Suburb', function () {
+        map.on('mouseenter', 'Micropolitan', function () {
           map.getCanvas().style.cursor = 'pointer';
-          document.getElementById("right-panel").style.width = "450px";
-          document.getElementById("right-panel").style.opacity = "0.6";
-          document.getElementById("panel-txt").style.visibility = "visible";
         });
-        map.on('mouseenter', 'Urban', function () {
+        map.on('mouseenter', 'Small Metro', function () {
           map.getCanvas().style.cursor = 'pointer';
-          document.getElementById("right-panel").style.width = "450px";
-          document.getElementById("right-panel").style.opacity = "0.6";
-          document.getElementById("panel-txt").style.visibility = "visible";
+        });
+        map.on('mouseenter', 'Medium Metro', function () {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseenter', 'Large Metro', function () {
+          map.getCanvas().style.cursor = 'pointer';
         });
 
         // Change it back to a pointer when it leaves.
-        map.on('mouseleave', 'amzn-counties', function () {
+        map.on('mouseleave', '2018 SVI', function () {
           map.getCanvas().style.cursor = '';
-          document.getElementById("right-panel").style.width = "15px";
-          document.getElementById("right-panel").style.opacity = "0.25";
-          document.getElementById("panel-txt").style.visibility = "collapse";
         });
-        map.on('mouseleave', 'Density', function () {
+        map.on('mouseleave', '2014 SVI', function () {
           map.getCanvas().style.cursor = '';
-          document.getElementById("right-panel").style.width = "15px";
-          document.getElementById("right-panel").style.opacity = "0.25";
-          document.getElementById("panel-txt").style.visibility = "collapse";
         });
-        map.on('mouseleave', 'Rural', function () {
+        map.on('mouseleave', 'SVI Change', function () {
           map.getCanvas().style.cursor = '';
-          document.getElementById("right-panel").style.width = "15px";
-          document.getElementById("right-panel").style.opacity = "0.25";
-          document.getElementById("panel-txt").style.visibility = "collapse";
         });
-        map.on('mouseleave', 'Suburb', function () {
+        map.on('mouseleave', 'Micropolitan', function () {
           map.getCanvas().style.cursor = '';
-          document.getElementById("right-panel").style.width = "15px";
-          document.getElementById("right-panel").style.opacity = "0.25";
-          document.getElementById("panel-txt").style.visibility = "collapse";
         });
-        map.on('mouseleave', 'Urban', function () {
+        map.on('mouseleave', 'Small Metro', function () {
           map.getCanvas().style.cursor = '';
-          document.getElementById("right-panel").style.width = "15px";
-          document.getElementById("right-panel").style.opacity = "0.25";
-          document.getElementById("panel-txt").style.visibility = "collapse";
+        });
+        map.on('mouseleave', 'Medium Metro', function () {
+          map.getCanvas().style.cursor = '';
+        });
+        map.on('mouseleave', 'Large Metro', function () {
+          map.getCanvas().style.cursor = '';
         });
       });
 
