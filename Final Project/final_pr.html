@@ -62,6 +62,23 @@
         opacity: 0.85;
         visibility: visible;
       }
+      #right-panel {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 20px;
+        width: 15px;
+        z-index: 2;
+        background-color: black;
+        padding: 5px;
+        text-align: center;
+        line-height: 30px;
+        padding-left: 10px;
+        color: white;
+        opacity: 0.25;
+        transition: all 1.2s;
+        overflow-x: hidden;
+      }
       #panel-txt {
         visibility: collapse;
         transition: all .1s;
@@ -229,6 +246,7 @@
         <p>When everything came to a halt during this pandemic, Amazon speeded up its operation...
             The company refused to shut down their facilities, taking advantage of the economic desperation caused by COVID to increase its market dominance.
             By 2021, there will be <b>498</b> Amazon warehouses in the U.S., across <b>204</b> counties and <b>42</b> states.<br><br>
+            <b>Conclusion</b><br>
             Looking at the sociol economic indicator from <a href="https://www.atsdr.cdc.gov/placeandhealth/svi/index.html">CDC SVI data </a>in counties with Amazon warehouses,
             we found that Amazon came to the relatively vulnerable communites and local SVI improved from 2014 to 2018,
             It aligned with the reason why local government invited Amazon, but was not sufficient to describe the
@@ -736,6 +754,8 @@
           map.getCanvas().style.cursor = '';
         });
       });
+
+      var btn1 = document.getElementById("button1");
 
       </script>
     </section>
